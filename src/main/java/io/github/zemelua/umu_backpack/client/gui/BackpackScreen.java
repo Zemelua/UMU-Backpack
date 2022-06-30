@@ -5,8 +5,10 @@ import io.github.zemelua.umu_backpack.client.UMUBackpackClient;
 import io.github.zemelua.umu_backpack.inventory.BackpackScreenHandler;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -50,5 +52,14 @@ public class BackpackScreen extends HandledScreen<BackpackScreenHandler> {
 		super.keyPressed(keyCode, scanCode, modifiers);
 
 		return true;
+	}
+
+	@Override
+	public void close() {
+		if (this.client != null) {
+			this.client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.6F));
+		}
+
+		super.close();
 	}
 }
