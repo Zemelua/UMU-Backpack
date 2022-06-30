@@ -1,0 +1,35 @@
+{
+	"parent": "minecraft:adventure/root",
+	"display": {
+		"title": {
+			"translate": "advancement.umu_backpack.adventure.backpack.title"
+		},
+		"description": {
+			"translate": "advancement.umu_backpack.adventure.backpack.description"
+		},
+		"icon": {
+			"item": "umu_backpack:backpack"
+		},
+		"frame": "task",
+		"show_toast": true,
+		"announce_to_chat": true,
+		"hidden": false
+	},
+	"criteria": {
+		"backpack": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "umu_backpack:backpack"
+					}
+				]
+			}
+		}
+	},
+	"requirements": [
+		[
+			"backpack"
+		]
+	]
+}

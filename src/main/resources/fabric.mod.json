@@ -1,0 +1,26 @@
+{
+	"schemaVersion": 1,
+	"id": "umu_backpack",
+	"version": "${version}",
+	"name": "UMU Backpack fabric",
+	"description": "",
+	"authors": [ ],
+	"contact": { },
+	"license": "MIT",
+	"icon": "assets/umu_backpack/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"client": [ "io.github.zemelua.umu_backpack.client.UMUBackpackClient" ],
+		"main": [ "io.github.zemelua.umu_backpack.UMUBackpack" ],
+		"mm:early_risers": [ "io.github.zemelua.umu_backpack.tinker.EarlyRiser" ]
+	},
+	"mixins": [
+		"umu_backpack.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.14.8",
+		"fabric": "*",
+		"minecraft": "1.19"
+	},
+	"accessWidener": "umu_backpack.accesswidener"
+}

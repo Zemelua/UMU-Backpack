@@ -1,0 +1,29 @@
+{
+	"parent": "umu_backpack:adventure/max_size_backpack",
+	"display": {
+		"title": {
+			"translate": "advancement.umu_backpack.adventure.tightly_backpack.title"
+		},
+		"description": {
+			"translate": "advancement.umu_backpack.adventure.tightly_backpack.description"
+		},
+		"icon": {
+			"item": "umu_backpack:backpack"
+		},
+		"frame": "challenge",
+		"show_toast": true,
+		"announce_to_chat": true,
+		"hidden": false
+	},
+	"criteria": {
+		"tightly_backpack": {
+			"trigger": "umu_backpack:tightly_backpack",
+			"conditions": {}
+		}
+	},
+	"requirements": [
+		[
+			"tightly_backpack"
+		]
+	]
+}

@@ -1,0 +1,41 @@
+{
+	"parent": "umu_backpack:adventure/backpack",
+	"display": {
+		"title": {
+			"translate": "advancement.umu_backpack.adventure.max_size_backpack.title"
+		},
+		"description": {
+			"translate": "advancement.umu_backpack.adventure.max_size_backpack.description"
+		},
+		"icon": {
+			"item": "umu_backpack:backpack"
+		},
+		"frame": "goal",
+		"show_toast": true,
+		"announce_to_chat": true,
+		"hidden": false
+	},
+	"criteria": {
+		"max_size_backpack": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "umu_backpack:backpack",
+						"enchantments": [
+							{
+								"enchantment": "umu_backpack:cram",
+								"levels": 5
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"requirements": [
+		[
+			"max_size_backpack"
+		]
+	]
+}

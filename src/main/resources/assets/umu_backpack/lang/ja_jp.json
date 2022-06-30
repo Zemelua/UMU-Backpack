@@ -1,0 +1,17 @@
+{
+	"item.umu_backpack.backpack": "バックパック",
+
+	"container.umu_backpack.backpack": "バックパック",
+
+	"enchantment.umu_backpack.cram": "整理整頓",
+	"enchantment.umu_backpack.back_protection": "不意打ち耐性",
+
+	"advancement.umu_backpack.adventure.backpack.title": "バックパック！",
+	"advancement.umu_backpack.adventure.backpack.description": "バックパックを装備する",
+	"advancement.umu_backpack.adventure.max_size_backpack.title": "整理整頓の達人",
+	"advancement.umu_backpack.adventure.max_size_backpack.description": "バックパックを最大まで拡張する",
+	"advancement.umu_backpack.adventure.tightly_backpack.title": "宝物でいっぱい",
+	"advancement.umu_backpack.adventure.tightly_backpack.description": "全てのインベントリをアイテムで満たす",
+
+	"key.umu_backpack.backpack": "バックパックの開閉"
+}

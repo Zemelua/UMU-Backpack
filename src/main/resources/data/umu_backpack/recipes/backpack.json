@@ -1,0 +1,26 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"#X#",
+		"Y Y",
+		"#Z#"
+	],
+	"key": {
+		"#": {
+			"item": "minecraft:leather"
+		},
+		"X": {
+			"item": "minecraft:gold_ingot"
+		},
+		"Y": {
+			"item": "minecraft:rabbit_hide"
+		},
+		"Z": {
+			"item": "minecraft:shulker_shell"
+		}
+	},
+	"result": {
+		"item": "umu_backpack:backpack",
+		"count": 1
+	}
+}

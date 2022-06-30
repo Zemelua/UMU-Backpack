@@ -1,0 +1,43 @@
+{
+	"parent": "minecraft:recipes/root",
+	"rewards": {
+		"recipes": [
+			"umu_backpack:backpack"
+		]
+	},
+	"criteria": {
+		"has_rabbit_hide": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "minecraft:rabbit_hide"
+					}
+				]
+			}
+		},
+		"has_shulker_shell": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "minecraft:shulker_shell"
+					}
+				]
+			}
+		},
+		"has_the_recipe": {
+			"trigger": "minecraft:recipe_unlocked",
+			"conditions": {
+				"recipe": "umu_backpack:backpack"
+			}
+		}
+	},
+	"requirements": [
+		[
+			"has_rabbit_hide",
+			"has_shulker_shell",
+			"has_the_recipe"
+		]
+	]
+}

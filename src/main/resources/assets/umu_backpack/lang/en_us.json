@@ -1,0 +1,17 @@
+{
+	"item.umu_backpack.backpack": "Backpack",
+
+	"container.umu_backpack.backpack": "Backpack",
+
+	"enchantment.umu_backpack.cram": "Cram",
+	"enchantment.umu_backpack.back_protection": "Back Protection",
+
+	"advancement.umu_backpack.adventure.backpack.title": "Backpack!",
+	"advancement.umu_backpack.adventure.backpack.description": "Equip a backpack",
+	"advancement.umu_backpack.adventure.max_size_backpack.title": "Cram Master",
+	"advancement.umu_backpack.adventure.max_size_backpack.description": "Cram your backpack to maximum",
+	"advancement.umu_backpack.adventure.tightly_backpack.title": "Full of treasures",
+	"advancement.umu_backpack.adventure.tightly_backpack.description": "Fill all inventory with items",
+
+	"key.umu_backpack.backpack": "Open/Close Backpack"
+}
