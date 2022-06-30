@@ -21,7 +21,7 @@
 			"conditions": {
 				"items": [
 					{
-						"item": "umu_backpack:backpack"
+						"items": [ "umu_backpack:backpack" ]
 					}
 				]
 			}

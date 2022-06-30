@@ -30,7 +30,7 @@ public class FullBackpackTrigger extends AbstractCriterion<FullBackpackTrigger.I
 
 	@Override
 	public Identifier getId() {
-		return null;
+		return FullBackpackTrigger.ID;
 	}
 
 	public static class Instance extends AbstractCriterionConditions {

@@ -2,10 +2,10 @@
 	"parent": "umu_backpack:adventure/max_size_backpack",
 	"display": {
 		"title": {
-			"translate": "advancement.umu_backpack.adventure.tightly_backpack.title"
+			"translate": "advancement.umu_backpack.adventure.full_backpack.title"
 		},
 		"description": {
-			"translate": "advancement.umu_backpack.adventure.tightly_backpack.description"
+			"translate": "advancement.umu_backpack.adventure.full_backpack.description"
 		},
 		"icon": {
 			"item": "umu_backpack:backpack"
@@ -16,14 +16,14 @@
 		"hidden": false
 	},
 	"criteria": {
-		"tightly_backpack": {
-			"trigger": "umu_backpack:tightly_backpack",
+		"full_backpack": {
+			"trigger": "umu_backpack:full_backpack",
 			"conditions": {}
 		}
 	},
 	"requirements": [
 		[
-			"tightly_backpack"
+			"full_backpack"
 		]
 	]
 }
