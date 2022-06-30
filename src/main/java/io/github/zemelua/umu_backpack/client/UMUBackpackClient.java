@@ -17,9 +17,12 @@ import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.DyeableItem;
 import net.minecraft.sound.SoundEvents;
 import org.lwjgl.glfw.GLFW;
+
+import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public class UMUBackpackClient implements ClientModInitializer {
@@ -43,8 +46,11 @@ public class UMUBackpackClient implements ClientModInitializer {
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (KEY_BACKPACK.wasPressed()) {
-				ClientPlayNetworking.send(NetworkHandler.CHANNEL_BACKPACK, PacketByteBufs.create());
-				client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F));
+				if (Objects.requireNonNull(client.player).getEquippedStack(EquipmentSlot.CHEST).isOf(ModItems.BACKPACK)
+						&& client.currentScreen == null) {
+					ClientPlayNetworking.send(NetworkHandler.CHANNEL_BACKPACK, PacketByteBufs.create());
+					client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F));
+				}
 			}
 		});
 	}
