@@ -1,14 +1,10 @@
 package io.github.zemelua.umu_backpack.item;
 
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.DyeableArmorItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
@@ -18,11 +14,14 @@ import javax.annotation.Nonnull;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static net.minecraft.entity.EquipmentSlot.*;
+import static net.minecraft.item.ArmorMaterials.*;
+
 public class BackpackItem extends DyeableArmorItem {
 	public static int SIZE = 54;
 
-	public BackpackItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
-		super(material, slot, settings);
+	public BackpackItem() {
+		super(LEATHER, CHEST, new Item.Settings().group(ItemGroup.TOOLS));
 	}
 
 	@Override

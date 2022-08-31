@@ -23,12 +23,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin extends PlayerEntity {
-	@Deprecated
-	public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile, @Nullable PlayerPublicKey publicKey) {
-		super(world, pos, yaw, gameProfile, publicKey);
-	}
-
-	@Inject(method = "onScreenHandlerOpened", at = @At("RETURN"))
+	@Inject(method = "onScreenHandlerOpened",
+			at = @At("RETURN"))
 	private void onScreenHandlerOpened(ScreenHandler handler, CallbackInfo callback) {
 		handler.addListener(new ScreenHandlerListener() {
 			@Override
@@ -38,12 +34,16 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 				ItemStack chestStack = ServerPlayerEntityMixin.this.getEquippedStack(EquipmentSlot.CHEST);
 
 				if (!(slot instanceof CraftingResultSlot) && slot.inventory == inventory && chestStack.isOf(ModItems.BACKPACK)) {
-					ModAdvancements.FULL_BACKPACK.trigger((ServerPlayerEntity) (Object) ServerPlayerEntityMixin.this, inventory, chestStack);
+					ModAdvancements.TRIGGER_FULL_BACKPACK.trigger((ServerPlayerEntity) (Object) ServerPlayerEntityMixin.this, inventory, chestStack);
 				}
 			}
 
-			@Override
-			public void onPropertyUpdate(ScreenHandler handler, int property, int value) {}
+			@Override public void onPropertyUpdate(ScreenHandler handler, int property, int value) {}
 		});
+	}
+
+	@Deprecated
+	public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile, @Nullable PlayerPublicKey publicKey) {
+		super(world, pos, yaw, gameProfile, publicKey);
 	}
 }

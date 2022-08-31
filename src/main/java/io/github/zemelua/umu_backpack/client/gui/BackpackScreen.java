@@ -46,6 +46,7 @@ public class BackpackScreen extends HandledScreen<BackpackScreenHandler> {
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		if (UMUBackpackClient.KEY_BACKPACK.matchesKey(keyCode, scanCode)) {
 			this.close();
+
 			return true;
 		}
 

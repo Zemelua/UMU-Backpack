@@ -1,4 +1,4 @@
-package io.github.zemelua.umu_backpack.client.model;
+package io.github.zemelua.umu_backpack.client.model.armor;
 
 import io.github.zemelua.umu_backpack.UMUBackpack;
 import net.minecraft.client.model.*;
@@ -26,9 +26,5 @@ public class BackpackModel extends BipedEntityModel<LivingEntity> {
 		);
 
 		return TexturedModelData.of(modelData, 64, 32).createModel();
-	}
-
-	public static Identifier getTexture(String overlay) {
-		return overlay == null ? BASE_TEXTURE : OVERLAY_TEXTURE;
 	}
 }

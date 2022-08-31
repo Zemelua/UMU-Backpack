@@ -1,16 +1,34 @@
 package io.github.zemelua.umu_backpack.enchantment;
 
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.item.ItemStack;
+
+import static net.minecraft.enchantment.Enchantment.Rarity.*;
 
 public class CramEnchantment extends Enchantment {
-	protected CramEnchantment(Rarity weight, EnchantmentTarget type, EquipmentSlot... slotTypes) {
-		super(weight, type, slotTypes);
+	protected CramEnchantment(EnchantmentTarget type) {
+		super(RARE, type, new EquipmentSlot[]{EquipmentSlot.CHEST});
 	}
 
 	@Override
 	public int getMaxLevel() {
 		return 5;
+	}
+
+	@Override
+	public int getMinPower(int level) {
+		return 3 + level * 6;
+	}
+
+	@Override
+	public int getMaxPower(int level) {
+		return this.getMinPower(level) + (int) Math.floor(Math.pow(5.0D / level, 2.0D));
+	}
+
+	public static int getLevel(ItemStack itemStack) {
+		return EnchantmentHelper.getLevel(ModEnchantments.CRAM, itemStack);
 	}
 }

@@ -15,7 +15,6 @@ import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,13 +22,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerScreenHandler.class)
 public abstract class PlayerScreenHandlerMixin extends AbstractRecipeScreenHandler<CraftingInventory> {
-	@Deprecated
-	public PlayerScreenHandlerMixin(ScreenHandlerType<?> screenHandlerType, int i) {
-		super(screenHandlerType, i);
-	}
-
-
-	@Inject(at = @At("RETURN"), method = "<init>")
+	@Inject(at = @At("RETURN"),
+			method = "<init>")
 	private void constructor(PlayerInventory inventory, boolean onServer, PlayerEntity owner, CallbackInfo callback) {
 		this.slots.set(6, new Slot(inventory, 38, 8, 26) {
 			{
@@ -65,9 +59,14 @@ public abstract class PlayerScreenHandlerMixin extends AbstractRecipeScreenHandl
 			}
 
 			@Override
-			public @NotNull Pair<Identifier, Identifier> getBackgroundSprite() {
+			public Pair<Identifier, Identifier> getBackgroundSprite() {
 				return Pair.of(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, PlayerScreenHandler.EMPTY_CHESTPLATE_SLOT_TEXTURE);
 			}
 		});
+	}
+
+	@Deprecated
+	public PlayerScreenHandlerMixin(ScreenHandlerType<?> screenHandlerType, int i) {
+		super(screenHandlerType, i);
 	}
 }

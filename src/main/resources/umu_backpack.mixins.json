@@ -4,9 +4,7 @@
 	"package": "io.github.zemelua.umu_backpack.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [ "EnchantmentTargetMixin", "ItemStackMixin", "LivingEntityMixin", "PlayerScreenHandlerMixin", "ServerPlayerEntityMixin" ],
-	"client": [
-		"ArmorFeatureRendererMixin"
-	],
+	"client": [],
 	"injectors": {
 		"defaultRequire": 1
 	}

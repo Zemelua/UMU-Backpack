@@ -23,19 +23,18 @@ public class FullBackpackTrigger extends AbstractCriterion<FullBackpackTrigger.I
 	}
 
 	@Override
-	protected Instance conditionsFromJson(JsonObject obj, EntityPredicate.Extended playerPredicate,
-	                                      AdvancementEntityPredicateDeserializer predicateDeserializer) {
-		return new FullBackpackTrigger.Instance(playerPredicate);
+	protected Instance conditionsFromJson(JsonObject obj, EntityPredicate.Extended player, AdvancementEntityPredicateDeserializer predicateDeserializer) {
+		return new Instance(player);
 	}
 
 	@Override
 	public Identifier getId() {
-		return FullBackpackTrigger.ID;
+		return ID;
 	}
 
 	public static class Instance extends AbstractCriterionConditions {
 		private Instance(EntityPredicate.Extended player) {
-			super(FullBackpackTrigger.ID, player);
+			super(ID, player);
 		}
 
 		/**
@@ -44,25 +43,23 @@ public class FullBackpackTrigger extends AbstractCriterion<FullBackpackTrigger.I
 		 * アーマースロットを除くすべてのインベントリとバックパックが満杯のバンドルで満たされたシュルカーボックスで埋まっ
 		 * ていること」に変更されます。
 		 */
-		public boolean matches(Inventory inventory, ItemStack backpack) {
-			if (!backpack.isOf(ModItems.BACKPACK)) return false;
-			if (EnchantmentHelper.getLevel(ModEnchantments.CRAM, backpack)
-					< ModEnchantments.CRAM.getMaxLevel()) return false;
+		private boolean matches(Inventory inventory, ItemStack itemStack) {
+			if (!itemStack.isOf(ModItems.BACKPACK)) return false;
+			if (EnchantmentHelper.getLevel(ModEnchantments.CRAM, itemStack) < ModEnchantments.CRAM.getMaxLevel()) return false;
 
 			for (int i = 0; i < inventory.size(); i++) {
-				ItemStack itemStack = inventory.getStack(i);
+				ItemStack individualStack = inventory.getStack(i);
 
 				if (i < 36 || i > 39) {
-					if (itemStack.isEmpty() || itemStack.getCount() < itemStack.getMaxCount()) return false;
+					if (individualStack.isEmpty() || individualStack.getCount() < individualStack.getMaxCount()) return false;
 				}
 			}
 
-			Inventory backpackInventory = BackpackItem.getInventory(backpack);
-
+			Inventory backpackInventory = BackpackItem.getInventory(itemStack);
 			for (int i = 0; i < backpackInventory.size(); i++) {
-				ItemStack itemStack = backpackInventory.getStack(i);
+				ItemStack individualStack = backpackInventory.getStack(i);
 
-				if (itemStack.isEmpty() || itemStack.getCount() < itemStack.getMaxCount()) return false;
+				if (individualStack.isEmpty() || individualStack.getCount() < individualStack.getMaxCount()) return false;
 			}
 
 			return true;

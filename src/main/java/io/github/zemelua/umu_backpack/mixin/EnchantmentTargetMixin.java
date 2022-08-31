@@ -7,5 +7,5 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(EnchantmentTarget.class)
 public abstract class EnchantmentTargetMixin {
-	@SuppressWarnings("unused") @Shadow public abstract boolean isAcceptableItem(Item item);
+	@Shadow @SuppressWarnings("unused") public abstract boolean isAcceptableItem(Item item);
 }
