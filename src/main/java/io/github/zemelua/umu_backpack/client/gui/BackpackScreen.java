@@ -3,6 +3,7 @@ package io.github.zemelua.umu_backpack.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.zemelua.umu_backpack.client.UMUBackpackClient;
 import io.github.zemelua.umu_backpack.inventory.BackpackScreenHandler;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -12,6 +13,9 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+import static net.fabricmc.api.EnvType.*;
+
+@Environment(CLIENT)
 public class BackpackScreen extends HandledScreen<BackpackScreenHandler> {
 	private static final Identifier TEXTURE = new Identifier("textures/gui/container/generic_54.png");
 	private final int rows;

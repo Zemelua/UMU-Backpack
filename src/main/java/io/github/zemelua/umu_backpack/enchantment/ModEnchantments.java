@@ -1,6 +1,5 @@
 package io.github.zemelua.umu_backpack.enchantment;
 
-import com.chocohead.mm.api.ClassTinkerers;
 import io.github.zemelua.umu_backpack.UMUBackpack;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
@@ -17,21 +16,24 @@ public final class ModEnchantments {
 
 	public static Enchantment BACK_PROTECTION;
 	public static Enchantment CRAM;
+	public static Enchantment LOAD;
 
 	public static void initialize() {
-		EnchantmentTarget target = ClassTinkerers.getEnum(EnchantmentTarget.class, "BACKPACK");
+		// EnchantmentTarget targetBackpack = ClassTinkerers.getEnum(EnchantmentTarget.class, "BACKPACK");
+		EnchantmentTarget targetBackpack = EnchantmentTarget.ARMOR_CHEST;
 
-		BACK_PROTECTION = new BackProtectionEnchantment(target);
-		CRAM = new CramEnchantment(target);
+		BACK_PROTECTION = new BackProtectionEnchantment(targetBackpack);
+		CRAM = new CramEnchantment(targetBackpack);
+		LOAD = new LoadEnchantment(targetBackpack);
 
 		Registry.register(Registry.ENCHANTMENT, UMUBackpack.identifier("back_protection"), BACK_PROTECTION);
 		Registry.register(Registry.ENCHANTMENT, UMUBackpack.identifier("cram"), CRAM);
+		Registry.register(Registry.ENCHANTMENT, UMUBackpack.identifier("load"), LOAD);
 
 		ItemGroup.TOOLS.setEnchantments(Stream.concat(
 						Arrays.stream(ItemGroup.TOOLS.getEnchantments()),
-						Stream.of(target)
-				).toArray(EnchantmentTarget[]::new)
-		);
+						Stream.of(targetBackpack)
+				).toArray(EnchantmentTarget[]::new));
 
 		LOGGER.info("初期化完了！");
 	}

@@ -10,8 +10,9 @@
 	"icon": "assets/umu_backpack/icon.png",
 	"environment": "*",
 	"entrypoints": {
-		"client": [ "io.github.zemelua.umu_backpack.client.UMUBackpackClient" ],
 		"main": [ "io.github.zemelua.umu_backpack.UMUBackpack" ],
+		"server": [ "io.github.zemelua.umu_backpack.server.UMUBackpackServer" ],
+		"client": [ "io.github.zemelua.umu_backpack.client.UMUBackpackClient" ],
 		"mm:early_risers": [ "io.github.zemelua.umu_backpack.tinker.EarlyRiser" ]
 	},
 	"mixins": [
@@ -20,7 +21,7 @@
 	"depends": {
 		"fabricloader": ">=0.14.8",
 		"fabric": "*",
-		"minecraft": "1.19.1"
+		"minecraft": "1.19.x"
 	},
 	"accessWidener": "umu_backpack.accesswidener"
 }

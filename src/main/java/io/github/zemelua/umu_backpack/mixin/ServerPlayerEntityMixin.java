@@ -1,12 +1,16 @@
 package io.github.zemelua.umu_backpack.mixin;
 
 import com.mojang.authlib.GameProfile;
+import io.github.zemelua.umu_backpack.UMUBackpack;
 import io.github.zemelua.umu_backpack.advancement.ModAdvancements;
+import io.github.zemelua.umu_backpack.enchantment.LoadEnchantment;
 import io.github.zemelua.umu_backpack.item.ModItems;
-import net.minecraft.entity.EquipmentSlot;
+import io.github.zemelua.umu_backpack.util.PlayerEntityInterface;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerListener;
@@ -17,12 +21,28 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static io.github.zemelua.umu_backpack.enchantment.LoadEnchantment.*;
+import static net.minecraft.entity.EquipmentSlot.*;
+
 @Mixin(ServerPlayerEntity.class)
-public abstract class ServerPlayerEntityMixin extends PlayerEntity {
+public abstract class ServerPlayerEntityMixin extends PlayerEntity implements PlayerEntityInterface {
+	@Shadow private boolean disconnected;
+
+	@Unique @Nullable private Entity loadCache;
+
+	@Override
+	public void setLoadCache(@Nullable Entity entity) {
+		this.loadCache = entity;
+
+		UMUBackpack.LOGGER.info("setCache");
+	}
+
 	@Inject(method = "onScreenHandlerOpened",
 			at = @At("RETURN"))
 	private void onScreenHandlerOpened(ScreenHandler handler, CallbackInfo callback) {
@@ -31,7 +51,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 			public void onSlotUpdate(ScreenHandler handler, int slotId, ItemStack itemStack) {
 				Slot slot = handler.getSlot(slotId);
 				Inventory inventory = ServerPlayerEntityMixin.this.getInventory();
-				ItemStack chestStack = ServerPlayerEntityMixin.this.getEquippedStack(EquipmentSlot.CHEST);
+				ItemStack chestStack = ServerPlayerEntityMixin.this.getEquippedStack(CHEST);
 
 				if (!(slot instanceof CraftingResultSlot) && slot.inventory == inventory && chestStack.isOf(ModItems.BACKPACK)) {
 					ModAdvancements.TRIGGER_FULL_BACKPACK.trigger((ServerPlayerEntity) (Object) ServerPlayerEntityMixin.this, inventory, chestStack);
@@ -40,6 +60,35 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 
 			@Override public void onPropertyUpdate(ScreenHandler handler, int property, int value) {}
 		});
+	}
+
+	@Inject(method = "onDisconnect",
+			at = @At("HEAD"),
+			cancellable = true)
+	private void onDisconnect(CallbackInfo callback) {
+		if (LoadEnchantment.has(this)) {
+			this.disconnected = true;
+			if (this.isSleeping()) {
+				this.wakeUp(true, false);
+			}
+
+			callback.cancel();
+		}
+	}
+
+	@Inject(method = "writeCustomDataToNbt",
+			at = @At("TAIL"))
+	public void writeCustomDataToNbt(NbtCompound NBT, CallbackInfo callback) {
+		if (this.loadCache != null) {
+			NbtCompound loadNBT = new NbtCompound();
+			@Nullable String ID = this.loadCache.getSavedEntityId();
+			if (ID != null) {
+				loadNBT.putString(ID_KEY, ID);
+				this.loadCache.writeNbt(loadNBT);
+
+				NBT.put(NBT_KEY, loadNBT);
+			}
+		}
 	}
 
 	@Deprecated

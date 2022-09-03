@@ -1,14 +1,18 @@
 package io.github.zemelua.umu_backpack;
 
 import io.github.zemelua.umu_backpack.advancement.ModAdvancements;
+import io.github.zemelua.umu_backpack.data.tag.ModTags;
 import io.github.zemelua.umu_backpack.enchantment.ModEnchantments;
 import io.github.zemelua.umu_backpack.inventory.ModInventories;
 import io.github.zemelua.umu_backpack.item.ModItems;
 import io.github.zemelua.umu_backpack.network.NetworkHandler;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class UMUBackpack implements ModInitializer {
+	public static final Logger LOGGER = LogManager.getLogger("UMU Backpack");
 
 	@Override
 	public void onInitialize() {
@@ -16,7 +20,8 @@ public class UMUBackpack implements ModInitializer {
 		ModEnchantments.initialize();
 		ModAdvancements.initialize();
 		ModInventories.initialize();
-		NetworkHandler.initialize();
+		ModTags.initialize();
+		NetworkHandler.initializeServer();
 	}
 
 	public static Identifier identifier(String path) {
