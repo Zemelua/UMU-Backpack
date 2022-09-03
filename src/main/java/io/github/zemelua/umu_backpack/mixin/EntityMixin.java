@@ -1,6 +1,7 @@
 package io.github.zemelua.umu_backpack.mixin;
 
 import io.github.zemelua.umu_backpack.enchantment.LoadEnchantment;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
@@ -20,12 +21,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
 
+import static net.fabricmc.api.EnvType.*;
+
 @Mixin(Entity.class)
 public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput {
 	@Shadow public World world;
 
 	@Shadow private Vec3d pos;
 
+	@Environment(CLIENT)
 	@Inject(method = "shouldRender(DDD)Z",
 			at = @At("HEAD"),
 			cancellable = true)
