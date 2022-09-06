@@ -1,7 +1,6 @@
 package io.github.zemelua.umu_backpack.client.model.armor;
 
 import io.github.zemelua.umu_backpack.UMUBackpack;
-import io.github.zemelua.umu_backpack.util.ModUtils;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
@@ -20,7 +19,7 @@ public class BackpackModel extends BipedEntityModel<LivingEntity> {
 	}
 
 	public static ModelPart createModel() {
-		ModelData modelData = ModUtils.createEmptyBipedModelData(new Dilation(0.0F));
+		ModelData modelData = BipedEntityModel.getModelData(new Dilation(0.0F), 0.0F);
 		ModelPartData modelPartData = modelData.getRoot();
 
 		modelPartData.getChild("body").addChild("backpack", ModelPartBuilder.create()

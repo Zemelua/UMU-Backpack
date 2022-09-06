@@ -33,7 +33,7 @@ public abstract class PlayerManagerMixin {
 					target = "Lnet/minecraft/server/PlayerManager;savePlayerData(Lnet/minecraft/server/network/ServerPlayerEntity;)V",
 					ordinal = 0))
 	@SuppressWarnings("SpellCheckingInspection")
-	private void injectRemove(ServerPlayerEntity player, CallbackInfo callback) {
+	private void removeLoadOnPlayerConnect(ServerPlayerEntity player, CallbackInfo callback) {
 		if (LoadEnchantment.has(player) && player.hasPassengers()) {
 			Entity load = Objects.requireNonNull(player.getFirstPassenger());
 			((PlayerEntityInterface) player).setLoadCache(load);
@@ -48,7 +48,7 @@ public abstract class PlayerManagerMixin {
 					ordinal = 0),
 			index = 7)
 	@SuppressWarnings("SpellCheckingInspection")
-	private NbtCompound modifyVariableOnPlayerConnect(NbtCompound playerNBT, ClientConnection connection, ServerPlayerEntity player) {
+	private NbtCompound spawnLoadOnPlayerConnect(NbtCompound playerNBT, ClientConnection connection, ServerPlayerEntity player) {
 		if (playerNBT != null) {
 			ServerWorld world = player.getWorld();
 

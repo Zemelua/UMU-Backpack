@@ -1,16 +1,18 @@
 package io.github.zemelua.umu_backpack.mixin;
 
-import io.github.zemelua.umu_backpack.enchantment.ModEnchantments;
+import io.github.zemelua.umu_backpack.enchantment.BackProtectionEnchantment;
 import io.github.zemelua.umu_backpack.item.BackpackItem;
-import io.github.zemelua.umu_backpack.item.ModItems;
-import net.minecraft.enchantment.EnchantmentHelper;
+import io.github.zemelua.umu_backpack.item.BackpackItem.BackpackInventory;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,49 +20,56 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import static net.minecraft.entity.EquipmentSlot.*;
+
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
-	@Shadow public abstract ItemStack getEquippedStack(EquipmentSlot var1);
-
-	@Shadow protected abstract void damageArmor(DamageSource source, float amount);
-
 	@Shadow public abstract int getArmor();
-
 	@Shadow public abstract double getAttributeValue(EntityAttribute attribute);
+	@Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
+	@Shadow public abstract boolean damage(DamageSource source, float amount);
+	@Shadow public abstract void damageArmor(DamageSource source, float amount);
 
 	@Inject(method = "onDeath",
 			at = @At("HEAD"))
-	private void onDeath(DamageSource damageSource, CallbackInfo callback) {
+	private void scatterBackpackInventory(DamageSource damageSource, CallbackInfo callback) {
 		if (!this.world.isClient()) {
-			ItemStack itemStack = this.getEquippedStack(EquipmentSlot.CHEST);
-			if (itemStack.isOf(ModItems.BACKPACK)) {
-				BackpackItem.Inventory inventory = BackpackItem.getInventory(itemStack);
-				inventory.getItemStacks().forEach(stack -> this.world.spawnEntity(new ItemEntity(this.world, this.getX(), this.getY(), this.getZ(), stack)));
-				inventory.clear();
-				inventory.markDirty();
-			}
+			ItemStack itemStack = this.getEquippedStack(CHEST);
+			BackpackInventory inventory = BackpackItem.getInventory(itemStack);
+			ItemScatterer.spawn(this.world, this, inventory);
+			inventory.clear();
+			inventory.markDirty();
 		}
 	}
 
+	/**
+	 * {@link LivingEntity#applyArmorToDamage(DamageSource, float)} の最初に適用。 <br>
+	 * 不意打ち耐性エンチャントのダメージ軽減を適用します。 <br>
+	 * 元のダメージをエンチャントレベル * 20%分減少させます。
+	 */
 	@Inject(method = "applyArmorToDamage",
 			at = @At("HEAD"),
 			cancellable = true)
-	private void applyArmorToDamage(DamageSource source, float amount, CallbackInfoReturnable<Float> callback) {
-		int backProtectionLevel = EnchantmentHelper.getEquipmentLevel(ModEnchantments.BACK_PROTECTION, (LivingEntity) (Object) this);
+	private void calculateDamageThroughBackProtection(DamageSource source, float amount, CallbackInfoReturnable<Float> callback) {
+		int backProtectionLevel = BackProtectionEnchantment.getLevel((LivingEntity) (Object) this);
 
 		if (backProtectionLevel > 0 && !source.bypassesArmor()) {
-			Vec3d damagePos = source.getPosition();
+			@Nullable Vec3d damagePos = source.getPosition();
 			if (damagePos == null) return;
 
-			Vec3d livingPos = this.getPos();
+			Vec3d selfPos = this.getPos();
 			Vec3d lookVec = this.getRotationVector();
-			Vec3d damageVec = damagePos.subtract(livingPos).negate().normalize();
+			Vec3d damageVec = selfPos.subtract(damagePos).normalize();
 
 			if (damageVec.dotProduct(lookVec) > 0.0D) {
 				this.damageArmor(source, amount);
-				amount = DamageUtil.getDamageLeft(amount, this.getArmor(), (float)this.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS));
 
-				callback.setReturnValue(Math.min(amount - amount * backProtectionLevel * 8.0F / 100.0F, 80));
+				float resultDamage = amount;
+				final float armor = this.getArmor();
+				final float armorToughness = MathHelper.floor(this.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS));
+				resultDamage = DamageUtil.getDamageLeft(resultDamage, armor, armorToughness);
+
+				callback.setReturnValue(Math.min(resultDamage - resultDamage * backProtectionLevel * 0.2F, resultDamage));
 			}
 		}
 	}

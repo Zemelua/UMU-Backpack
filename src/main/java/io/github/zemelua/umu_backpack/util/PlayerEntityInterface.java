@@ -4,5 +4,5 @@ import net.minecraft.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
 public interface PlayerEntityInterface {
-	void setLoadCache(@Nullable Entity entity);
+	void setLoadCache(@Nullable Entity value);
 }

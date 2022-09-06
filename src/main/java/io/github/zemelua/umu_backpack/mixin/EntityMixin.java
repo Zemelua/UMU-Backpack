@@ -26,14 +26,13 @@ import static net.fabricmc.api.EnvType.*;
 @Mixin(Entity.class)
 public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput {
 	@Shadow public World world;
-
 	@Shadow private Vec3d pos;
 
 	@Environment(CLIENT)
 	@Inject(method = "shouldRender(DDD)Z",
 			at = @At("HEAD"),
 			cancellable = true)
-	private void injectShouldRender(CallbackInfoReturnable<Boolean> callback) {
+	private void skipRenderingLoadWhenFirstPerson(double cameraX, double cameraY, double cameraZ, CallbackInfoReturnable<Boolean> callback) {
 		if (this.world.isClient()) {
 			MinecraftClient client = MinecraftClient.getInstance();
 			PlayerEntity player = Objects.requireNonNull(client.player);
@@ -49,7 +48,7 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
 	@Inject(method = "calculateBoundingBox",
 			at = @At("HEAD"),
 			cancellable = true)
-	private void injectCalculateBoundingBox(CallbackInfoReturnable<Box> callback) {
+	private void downSizeBoxWhenLoaded(CallbackInfoReturnable<Box> callback) {
 		if (LoadEnchantment.isLoaded((Entity) (Object) this)) {
 			callback.setReturnValue(DIMENSIONS_LOADED.getBoxAt(this.pos));
 		}

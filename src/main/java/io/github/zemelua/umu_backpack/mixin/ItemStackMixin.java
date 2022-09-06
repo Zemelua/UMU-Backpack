@@ -1,9 +1,10 @@
 package io.github.zemelua.umu_backpack.mixin;
 
 import io.github.zemelua.umu_backpack.item.BackpackItem;
-import net.minecraft.entity.ItemEntity;
+import io.github.zemelua.umu_backpack.item.BackpackItem.BackpackInventory;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,13 +22,10 @@ public abstract class ItemStackMixin {
 			at = @At(value = "INVOKE",
 					target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V"))
 	@SuppressWarnings("SpellCheckingInspection")
-	private <T extends LivingEntity> void damage(int amount, T living, Consumer<T> onBreak, CallbackInfo callback) {
-		BackpackItem.Inventory inventory = BackpackItem.getInventory(this.copy());
-		final World world = living.getWorld();
-		final double x = living.getX();
-		final double y = living.getY();
-		final double z = living.getZ();
+	private <T extends LivingEntity> void dropInventoryWhenBroken(int amount, T living, Consumer<T> onBreak, CallbackInfo callback) {
+		BackpackInventory inventory = BackpackItem.getInventory(this.copy());
+		World world = living.getWorld();
 
-		inventory.getItemStacks().forEach(stack -> world.spawnEntity(new ItemEntity(world, x, y, z, stack)));
+		ItemScatterer.spawn(world, living, inventory);
 	}
 }

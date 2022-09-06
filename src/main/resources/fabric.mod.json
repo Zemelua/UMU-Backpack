@@ -11,7 +11,6 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [ "io.github.zemelua.umu_backpack.UMUBackpack" ],
-		"server": [ "io.github.zemelua.umu_backpack.server.UMUBackpackServer" ],
 		"client": [ "io.github.zemelua.umu_backpack.client.UMUBackpackClient" ],
 		"mm:early_risers": [ "io.github.zemelua.umu_backpack.tinker.EarlyRiser" ]
 	},

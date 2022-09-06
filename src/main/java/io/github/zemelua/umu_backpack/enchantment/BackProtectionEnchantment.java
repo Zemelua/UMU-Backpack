@@ -4,12 +4,15 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 
+import static io.github.zemelua.umu_backpack.enchantment.ModEnchantments.*;
 import static net.minecraft.enchantment.Enchantment.Rarity.*;
+import static net.minecraft.entity.EquipmentSlot.*;
 
 public class BackProtectionEnchantment extends Enchantment {
-	protected BackProtectionEnchantment(EnchantmentTarget type) {
+	public BackProtectionEnchantment(EnchantmentTarget type) {
 		super(UNCOMMON, type, new EquipmentSlot[]{EquipmentSlot.CHEST});
 	}
 
@@ -29,6 +32,10 @@ public class BackProtectionEnchantment extends Enchantment {
 	}
 
 	public static int getLevel(ItemStack itemStack) {
-		return EnchantmentHelper.getLevel(ModEnchantments.BACK_PROTECTION, itemStack);
+		return EnchantmentHelper.getLevel(BACK_PROTECTION, itemStack);
+	}
+
+	public static int getLevel(LivingEntity living) {
+		return getLevel(living.getEquippedStack(CHEST));
 	}
 }

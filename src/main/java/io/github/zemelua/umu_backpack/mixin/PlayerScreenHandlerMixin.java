@@ -22,9 +22,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerScreenHandler.class)
 public abstract class PlayerScreenHandlerMixin extends AbstractRecipeScreenHandler<CraftingInventory> {
-	@Inject(at = @At("RETURN"),
-			method = "<init>")
-	private void constructor(PlayerInventory inventory, boolean onServer, PlayerEntity owner, CallbackInfo callback) {
+	@Inject(method = "<init>",
+			at = @At("RETURN"))
+	private void replaceChestSlot(PlayerInventory inventory, boolean onServer, PlayerEntity owner, CallbackInfo callback) {
 		this.slots.set(6, new Slot(inventory, 38, 8, 26) {
 			{
 				this.id = 6;
@@ -66,7 +66,7 @@ public abstract class PlayerScreenHandlerMixin extends AbstractRecipeScreenHandl
 	}
 
 	@Deprecated
-	public PlayerScreenHandlerMixin(ScreenHandlerType<?> screenHandlerType, int i) {
+	private PlayerScreenHandlerMixin(ScreenHandlerType<?> screenHandlerType, int i) {
 		super(screenHandlerType, i);
 	}
 }

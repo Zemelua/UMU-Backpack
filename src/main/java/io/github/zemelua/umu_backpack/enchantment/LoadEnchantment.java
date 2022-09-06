@@ -6,7 +6,6 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
@@ -45,8 +44,8 @@ public class LoadEnchantment extends Enchantment {
 		return EnchantmentHelper.getLevel(LOAD, itemStack) > 0;
 	}
 
-	public static boolean has(PlayerEntity player) {
-		return has(player.getEquippedStack(CHEST));
+	public static boolean has(LivingEntity living) {
+		return has(living.getEquippedStack(CHEST));
 	}
 
 	public static void load(LivingEntity owner, Entity load) {

@@ -9,6 +9,8 @@ public class EarlyRiser implements Runnable {
 	public void run() {
 		MappingResolver reMapper = FabricLoader.getInstance().getMappingResolver();
 		String enchantmentTarget = reMapper.mapClassName("intermediary", "net.minecraft.class_1886");
-		ClassTinkerers.enumBuilder(enchantmentTarget).addEnumSubclass("BACKPACK", "io.github.zemelua.umu_backpack.enchantment.BackpackEnchantmentTarget").build();
+		ClassTinkerers.enumBuilder(enchantmentTarget)
+				.addEnumSubclass("BACKPACK", "io.github.zemelua.umu_backpack.enchantment.BackpackEnchantmentTarget")
+				.build();
 	}
 }

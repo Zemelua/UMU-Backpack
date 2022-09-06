@@ -38,7 +38,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 			return new Vec3d(-0.24D, 0.1D, 0.0D);
 		}
 
-		return Vec3d.ZERO;
+		return new Vec3d(-0.33D, 0.0D, 0.0D);
 	}
 
 	@Override

@@ -29,6 +29,8 @@ public class UMUBackpackClient implements ClientModInitializer {
 			KeyBinding.INVENTORY_CATEGORY
 	);
 
+	@Environment(CLIENT) public static int BACKPACK_LOAD_COOLDOWN = 0;
+
 	@Override
 	public void onInitializeClient() {
 		ArmorRenderer.register(BackpackRenderer.INSTANCE, ModItems.BACKPACK);

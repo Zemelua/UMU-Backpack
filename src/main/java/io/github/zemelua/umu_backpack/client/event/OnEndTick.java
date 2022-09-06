@@ -37,59 +37,67 @@ public class OnEndTick implements ClientTickEvents.EndTick {
 
 			if (chestStack.isOf(ModItems.BACKPACK)) {
 				if (LoadEnchantment.has(chestStack)) {
-					HitResult target = Objects.requireNonNull(client.crosshairTarget);
+					if (BACKPACK_LOAD_COOLDOWN <= 0) {
+						HitResult target = Objects.requireNonNull(client.crosshairTarget);
 
-					if (player.hasPassengers()) {
-						switch (target.getType()) {
-							case ENTITY -> {
-								Entity targetEntity = ((EntityHitResult) target).getEntity();
+						if (player.hasPassengers()) {
+							switch (target.getType()) {
+								case ENTITY -> {
+									Entity targetEntity = ((EntityHitResult) target).getEntity();
 
-								if (targetEntity.equals(player.getFirstPassenger())) {
+									if (targetEntity.equals(player.getFirstPassenger())) {
+										PacketByteBuf packet = PacketByteBufs.create();
+										packet.writeBoolean(false);
+										ClientPlayNetworking.send(NetworkHandler.CHANNEL_UNLOAD, packet);
+										client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.6F));
+									} else {
+										if (targetEntity.getType().isIn(ModTags.ENTITY_CAN_LOAD) && targetEntity.canStartRiding(player)) {
+											PacketByteBuf unloadPacket = PacketByteBufs.create();
+											unloadPacket.writeBoolean(true);
+											unloadPacket.writeBlockPos(targetEntity.getBlockPos());
+											ClientPlayNetworking.send(NetworkHandler.CHANNEL_UNLOAD, unloadPacket);
+
+											PacketByteBuf loadPacket = PacketByteBufs.create();
+											loadPacket.writeInt(targetEntity.getId());
+
+											ClientPlayNetworking.send(NetworkHandler.CHANNEL_LOAD, loadPacket);
+											client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.6F));
+										}
+									}
+								}
+								case BLOCK -> {
+									BlockHitResult targetBlock = (BlockHitResult) target;
+
+									PacketByteBuf packet = PacketByteBufs.create();
+									packet.writeBoolean(true);
+									packet.writeBlockPos(targetBlock.getBlockPos().offset(targetBlock.getSide()));
+									ClientPlayNetworking.send(NetworkHandler.CHANNEL_UNLOAD, packet);
+									client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.6F));
+								}
+								case MISS -> {
 									PacketByteBuf packet = PacketByteBufs.create();
 									packet.writeBoolean(false);
 									ClientPlayNetworking.send(NetworkHandler.CHANNEL_UNLOAD, packet);
 									client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.6F));
-								} else {
-									if (targetEntity.getType().isIn(ModTags.ENTITY_CAN_LOAD) && targetEntity.canStartRiding(player)) {
-										PacketByteBuf unloadPacket = PacketByteBufs.create();
-										unloadPacket.writeBoolean(true);
-										unloadPacket.writeBlockPos(targetEntity.getBlockPos());
-										ClientPlayNetworking.send(NetworkHandler.CHANNEL_UNLOAD, unloadPacket);
-
-										PacketByteBuf loadPacket = PacketByteBufs.create();
-										loadPacket.writeInt(targetEntity.getId());
-
-										ClientPlayNetworking.send(NetworkHandler.CHANNEL_LOAD, loadPacket);
-										client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.6F));
-									}
 								}
-							} case BLOCK -> {
-								BlockHitResult targetBlock = (BlockHitResult) target;
 
-								PacketByteBuf packet = PacketByteBufs.create();
-								packet.writeBoolean(true);
-								packet.writeBlockPos(targetBlock.getBlockPos().offset(targetBlock.getSide()));
-								ClientPlayNetworking.send(NetworkHandler.CHANNEL_UNLOAD, packet);
-								client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.6F));
-							} case MISS -> {
-								PacketByteBuf packet = PacketByteBufs.create();
-								packet.writeBoolean(false);
-								ClientPlayNetworking.send(NetworkHandler.CHANNEL_UNLOAD, packet);
-								client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.6F));
+							}
+
+						} else {
+							if (target.getType() == HitResult.Type.ENTITY) {
+								Entity targetEntity = ((EntityHitResult) target).getEntity();
+
+								if (targetEntity.getType().isIn(ModTags.ENTITY_CAN_LOAD) && targetEntity.canStartRiding(player)) {
+									PacketByteBuf loadPacket = PacketByteBufs.create();
+									loadPacket.writeInt(targetEntity.getId());
+
+									ClientPlayNetworking.send(NetworkHandler.CHANNEL_LOAD, loadPacket);
+									client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F));
+								}
 							}
 						}
-					} else {
-						if (target.getType() == HitResult.Type.ENTITY) {
-							Entity targetEntity = ((EntityHitResult) target).getEntity();
 
-							if (targetEntity.getType().isIn(ModTags.ENTITY_CAN_LOAD) && targetEntity.canStartRiding(player)) {
-								PacketByteBuf loadPacket = PacketByteBufs.create();
-								loadPacket.writeInt(targetEntity.getId());
-
-								ClientPlayNetworking.send(NetworkHandler.CHANNEL_LOAD, loadPacket);
-								client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F));
-							}
-						}
+						BACKPACK_LOAD_COOLDOWN = 15;
 					}
 				} else {
 					if (client.currentScreen == null) {
@@ -98,6 +106,10 @@ public class OnEndTick implements ClientTickEvents.EndTick {
 					}
 				}
 			}
+		}
+
+		if (BACKPACK_LOAD_COOLDOWN > 0) {
+			BACKPACK_LOAD_COOLDOWN--;
 		}
 	}
 

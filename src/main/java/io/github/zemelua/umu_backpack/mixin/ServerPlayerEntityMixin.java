@@ -1,7 +1,6 @@
 package io.github.zemelua.umu_backpack.mixin;
 
 import com.mojang.authlib.GameProfile;
-import io.github.zemelua.umu_backpack.UMUBackpack;
 import io.github.zemelua.umu_backpack.advancement.ModAdvancements;
 import io.github.zemelua.umu_backpack.enchantment.LoadEnchantment;
 import io.github.zemelua.umu_backpack.item.ModItems;
@@ -37,15 +36,13 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Pl
 	@Unique @Nullable private Entity loadCache;
 
 	@Override
-	public void setLoadCache(@Nullable Entity entity) {
-		this.loadCache = entity;
-
-		UMUBackpack.LOGGER.info("setCache");
+	public void setLoadCache(@Nullable Entity value) {
+		this.loadCache = value;
 	}
 
 	@Inject(method = "onScreenHandlerOpened",
 			at = @At("RETURN"))
-	private void onScreenHandlerOpened(ScreenHandler handler, CallbackInfo callback) {
+	private void triggerFullBackpackAdvancement(ScreenHandler handler, CallbackInfo callback) {
 		handler.addListener(new ScreenHandlerListener() {
 			@Override
 			public void onSlotUpdate(ScreenHandler handler, int slotId, ItemStack itemStack) {
@@ -65,7 +62,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Pl
 	@Inject(method = "onDisconnect",
 			at = @At("HEAD"),
 			cancellable = true)
-	private void onDisconnect(CallbackInfo callback) {
+	private void skipDismountWhenHasLoad(CallbackInfo callback) {
 		if (LoadEnchantment.has(this)) {
 			this.disconnected = true;
 			if (this.isSleeping()) {
@@ -78,7 +75,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Pl
 
 	@Inject(method = "writeCustomDataToNbt",
 			at = @At("TAIL"))
-	public void writeCustomDataToNbt(NbtCompound NBT, CallbackInfo callback) {
+	private void writeLoadNBT(NbtCompound NBT, CallbackInfo callback) {
 		if (this.loadCache != null) {
 			NbtCompound loadNBT = new NbtCompound();
 			@Nullable String ID = this.loadCache.getSavedEntityId();
@@ -92,7 +89,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Pl
 	}
 
 	@Deprecated
-	public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile, @Nullable PlayerPublicKey publicKey) {
+	private ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile, @Nullable PlayerPublicKey publicKey) {
 		super(world, pos, yaw, gameProfile, publicKey);
 	}
 }

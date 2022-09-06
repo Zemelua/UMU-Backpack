@@ -3,15 +3,11 @@ package io.github.zemelua.umu_backpack.item;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.Direction;
-import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static net.minecraft.entity.EquipmentSlot.*;
@@ -31,38 +27,21 @@ public class BackpackItem extends DyeableArmorItem {
 		}
 	}
 
-	public static Inventory getInventory(ItemStack itemStack) {
-		return new Inventory(itemStack);
+	public static BackpackInventory getInventory(ItemStack itemStack) {
+		return new BackpackInventory(itemStack);
 	}
 
-	public static final class Inventory implements SidedInventory {
-		private static final int[] AVAILABLE_SLOTS = IntStream.range(0, SIZE).toArray();
-
+	public static final class BackpackInventory implements net.minecraft.inventory.Inventory {
 		private final ItemStack itemStack;
 		private final DefaultedList<ItemStack> itemStacks = DefaultedList.ofSize(54, ItemStack.EMPTY);
 
-		private Inventory(ItemStack itemStack) {
+		private BackpackInventory(ItemStack itemStack) {
 			this.itemStack = itemStack;
 			Inventories.readNbt(this.itemStack.getOrCreateNbt(), this.itemStacks);
 		}
 
 		public Stream<ItemStack> getItemStacks() {
 			return this.itemStacks.stream().map(ItemStack::copy);
-		}
-
-		@Override
-		public int[] getAvailableSlots(Direction side) {
-			return AVAILABLE_SLOTS;
-		}
-
-		@Override
-		public boolean canInsert(int slot, ItemStack stack, @Nullable Direction side) {
-			return true;
-		}
-
-		@Override
-		public boolean canExtract(int slot, ItemStack stack, Direction side) {
-			return true;
 		}
 
 		@Override
