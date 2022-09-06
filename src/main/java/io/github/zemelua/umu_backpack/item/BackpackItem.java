@@ -1,19 +1,29 @@
 package io.github.zemelua.umu_backpack.item;
 
+import io.github.zemelua.umu_backpack.enchantment.LoadEnchantment;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
+import static io.github.zemelua.umu_backpack.item.ModItems.*;
 import static net.minecraft.entity.EquipmentSlot.*;
 import static net.minecraft.item.ArmorMaterials.*;
 
 public class BackpackItem extends DyeableArmorItem {
+	public static final String NBT_KEY = "Load";
 	public static int SIZE = 54;
 
 	public BackpackItem() {
@@ -31,9 +41,74 @@ public class BackpackItem extends DyeableArmorItem {
 		return new BackpackInventory(itemStack);
 	}
 
+	public static Optional<Entity> getLoad(LivingEntity owner) {
+		if (!LoadEnchantment.has(owner)) return Optional.empty();
+
+		return Optional.ofNullable(owner.hasPrimaryPassenger()
+				? owner.getPrimaryPassenger()
+				: owner.getFirstPassenger());
+	}
+	/**
+	 * Load が存在してることを確認してから呼んでね！
+	 * @see #hasLoad(LivingEntity)
+	 * @see #getLoad(LivingEntity)
+	 */
+	public static Entity getLoadDirect(LivingEntity owner) {
+		return getLoad(owner).orElseThrow();
+	}
+
+	public static boolean hasLoad(LivingEntity owner) {
+		return LoadEnchantment.has(owner) && getLoad(owner).isPresent();
+	}
+
+	/**
+	 * Load が存在してたら降ろしてから背負うよ！
+	 * @see #unload(LivingEntity, BlockPos)
+	 */
+	public static void load(LivingEntity owner, Entity load) {
+		if (hasLoad(owner)) {
+			unload(owner, load.getBlockPos());
+		}
+
+		load.startRiding(owner, true);
+	}
+
+	/**
+	 * Load が存在してるのを確認してから呼び出してね！
+	 * @see #hasLoad(LivingEntity)
+	 */
+	public static void unload(LivingEntity owner, @Nullable BlockPos pos) {
+		Entity load = getLoad(owner).orElseThrow();
+
+		if (pos != null) {
+			if (load instanceof ServerPlayerEntity) {
+				load.requestTeleportAndDismount(pos.getX(), pos.getY(), pos.getZ());
+			} else {
+				load.dismountVehicle();
+				load.requestTeleport(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
+			}
+		} else {
+			load.stopRiding();
+		}
+	}
+
+	public static boolean isLoaded(Entity passenger) {
+		if (!passenger.hasVehicle()) return false;
+
+		Entity vehicle = Objects.requireNonNull(passenger.getVehicle());
+		if (!(vehicle instanceof LivingEntity living)) return false;
+		if (!living.getEquippedStack(CHEST).isOf(BACKPACK)) return false;
+
+		Entity load = Objects.requireNonNull(vehicle.hasPrimaryPassenger()
+				? vehicle.getPrimaryPassenger()
+				: vehicle.getFirstPassenger());
+
+		return passenger.equals(load);
+	}
+
 	public static final class BackpackInventory implements net.minecraft.inventory.Inventory {
 		private final ItemStack itemStack;
-		private final DefaultedList<ItemStack> itemStacks = DefaultedList.ofSize(54, ItemStack.EMPTY);
+		private final DefaultedList<ItemStack> itemStacks = DefaultedList.ofSize(SIZE, ItemStack.EMPTY);
 
 		private BackpackInventory(ItemStack itemStack) {
 			this.itemStack = itemStack;

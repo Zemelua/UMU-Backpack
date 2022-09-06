@@ -3,6 +3,7 @@ package io.github.zemelua.umu_backpack.mixin;
 import com.mojang.authlib.GameProfile;
 import io.github.zemelua.umu_backpack.advancement.ModAdvancements;
 import io.github.zemelua.umu_backpack.enchantment.LoadEnchantment;
+import io.github.zemelua.umu_backpack.item.BackpackItem;
 import io.github.zemelua.umu_backpack.item.ModItems;
 import io.github.zemelua.umu_backpack.util.PlayerEntityInterface;
 import net.minecraft.entity.Entity;
@@ -26,7 +27,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static io.github.zemelua.umu_backpack.enchantment.LoadEnchantment.*;
 import static net.minecraft.entity.EquipmentSlot.*;
 
 @Mixin(ServerPlayerEntity.class)
@@ -62,7 +62,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Pl
 	@Inject(method = "onDisconnect",
 			at = @At("HEAD"),
 			cancellable = true)
-	private void skipDismountWhenHasLoad(CallbackInfo callback) {
+	private void skipDismountIfHasLoad(CallbackInfo callback) {
 		if (LoadEnchantment.has(this)) {
 			this.disconnected = true;
 			if (this.isSleeping()) {
@@ -83,7 +83,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Pl
 				loadNBT.putString(ID_KEY, ID);
 				this.loadCache.writeNbt(loadNBT);
 
-				NBT.put(NBT_KEY, loadNBT);
+				NBT.put(BackpackItem.NBT_KEY, loadNBT);
 			}
 		}
 	}

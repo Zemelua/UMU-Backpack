@@ -8,8 +8,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.UUID;
-
 import static net.fabricmc.api.EnvType.*;
 
 public final class NetworkHandler {
@@ -48,18 +46,18 @@ public final class NetworkHandler {
 	@Environment(CLIENT)
 	public static void initializeClient() {
 		ClientPlayNetworking.registerGlobalReceiver(CHANNEL_LOAD_TO_CLIENT, (client, handler, packet, sender) -> {
-			final UUID playerID = packet.readUuid();
-			final int entityID = packet.readInt();
+			final int ownerID = packet.readInt();
+			final int loadID = packet.readInt();
 
-			client.execute(() -> PacketHandlers.loadOnClient(client, playerID, entityID));
+			client.execute(() -> PacketHandlers.loadOnClient(client, ownerID, loadID));
 		});
 		ClientPlayNetworking.registerGlobalReceiver(CHANNEL_UNLOAD_TO_CLIENT, (client, handler, packet, sender) -> {
-			final UUID playerID = packet.readUuid();
+			final int ownerID = packet.readInt();
 			@Nullable final BlockPos pos = packet.readBoolean()
 					? packet.readBlockPos()
 					: null;
 
-			client.execute(() -> PacketHandlers.unloadOnClient(client, playerID, pos));
+			client.execute(() -> PacketHandlers.unloadOnClient(client, ownerID, pos));
 		});
 	}
 

@@ -3,6 +3,9 @@ package io.github.zemelua.umu_backpack.mixin;
 import com.mojang.datafixers.util.Pair;
 import io.github.zemelua.umu_backpack.item.BackpackItem;
 import io.github.zemelua.umu_backpack.item.ModItems;
+import io.github.zemelua.umu_backpack.network.NetworkHandler;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.mob.MobEntity;
@@ -10,6 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.AbstractRecipeScreenHandler;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
@@ -48,14 +52,29 @@ public abstract class PlayerScreenHandlerMixin extends AbstractRecipeScreenHandl
 			}
 
 			@Override
-			public boolean canTakeItems(PlayerEntity playerEntity) {
+			public boolean canTakeItems(PlayerEntity player) {
 				ItemStack itemStack = this.getStack();
 				if (itemStack.isEmpty()) return true;
-				if (playerEntity.isCreative()) return true;
+				if (player.isCreative()) return true;
 
-				if (itemStack.isOf(ModItems.BACKPACK) && !BackpackItem.getInventory(itemStack).isEmpty()) return false;
+				if (itemStack.isOf(ModItems.BACKPACK)) {
+					if (!BackpackItem.getInventory(itemStack).isEmpty()) return false;
+					if (BackpackItem.hasLoad(player)) return false;
+				}
 
 				return !EnchantmentHelper.hasBindingCurse(itemStack);
+			}
+
+			@Override
+			public void onTakeItem(PlayerEntity player, ItemStack stack) {
+				if (BackpackItem.hasLoad(player)) {
+					PacketByteBuf packet = PacketByteBufs.create();
+					packet.writeBoolean(false);
+
+					ClientPlayNetworking.send(NetworkHandler.CHANNEL_UNLOAD, packet);
+				}
+
+				this.markDirty();
 			}
 
 			@Override

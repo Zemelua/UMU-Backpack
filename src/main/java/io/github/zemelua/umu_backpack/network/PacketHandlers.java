@@ -1,7 +1,6 @@
 package io.github.zemelua.umu_backpack.network;
 
 import io.github.zemelua.umu_backpack.UMUBackpack;
-import io.github.zemelua.umu_backpack.enchantment.LoadEnchantment;
 import io.github.zemelua.umu_backpack.inventory.BackpackScreenHandler;
 import io.github.zemelua.umu_backpack.item.BackpackItem;
 import net.fabricmc.api.Environment;
@@ -11,6 +10,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
@@ -22,8 +22,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 
+import static io.github.zemelua.umu_backpack.item.BackpackItem.*;
 import static io.github.zemelua.umu_backpack.item.ModItems.*;
 import static io.github.zemelua.umu_backpack.network.NetworkHandler.*;
 import static net.fabricmc.api.EnvType.*;
@@ -51,10 +51,10 @@ public final class PacketHandlers {
 	public static void loadOnServer(ServerPlayerEntity player, int targetID) {
 		Optional<Entity> entity = Optional.ofNullable(player.getWorld().getEntityById(targetID));
 		entity.ifPresent(entityValue -> {
-			LoadEnchantment.load(player, entityValue);
+			load(player, entityValue);
 
 			PacketByteBuf packet = PacketByteBufs.create();
-			packet.writeUuid(player.getUuid());
+			packet.writeInt(player.getId());
 			packet.writeInt(entityValue.getId());
 			for (ServerPlayerEntity tracking : PlayerLookup.tracking(entityValue)) {
 				ServerPlayNetworking.send(tracking, NetworkHandler.CHANNEL_LOAD_TO_CLIENT, packet);
@@ -63,10 +63,10 @@ public final class PacketHandlers {
 	}
 
 	public static void unloadOnServer(ServerPlayerEntity player, @Nullable BlockPos pos) {
-		LoadEnchantment.unload(player, pos);
+		unload(player, pos);
 
 		PacketByteBuf packet = PacketByteBufs.create();
-		packet.writeUuid(player.getUuid());
+		packet.writeInt(player.getId());
 
 		if (pos == null) {
 			packet.writeBoolean(false);
@@ -85,22 +85,26 @@ public final class PacketHandlers {
 	}
 
 	@Environment(CLIENT)
-	public static void loadOnClient(MinecraftClient client, UUID playerID, int targetID) {
+	public static void loadOnClient(MinecraftClient client, int ownerID, int loadID) {
 		World world = Objects.requireNonNull(client.world);
 
-		Optional<PlayerEntity> player = Optional.ofNullable(world.getPlayerByUuid(playerID));
-		Optional<Entity> target = Optional.ofNullable(world.getEntityById(targetID));
+		Optional<LivingEntity> owner = Optional.ofNullable(world.getEntityById(ownerID))
+				.filter(ownerValue -> ownerValue instanceof LivingEntity)
+				.map(ownerValue -> (LivingEntity) ownerValue);
+		Optional<Entity> load = Optional.ofNullable(world.getEntityById(loadID));
 
-		player.ifPresent(playerValue -> target.ifPresent(targetValue -> LoadEnchantment.load(playerValue, targetValue)));
+		owner.ifPresent(ownerValue -> load.ifPresent(targetValue -> load(ownerValue, targetValue)));
 	}
 
 	@Environment(CLIENT)
-	public static void unloadOnClient(MinecraftClient client, UUID playerID, @Nullable BlockPos pos) {
+	public static void unloadOnClient(MinecraftClient client, int ownerID, @Nullable BlockPos pos) {
 		World world = Objects.requireNonNull(client.world);
 
-		Optional<PlayerEntity> player = Optional.ofNullable(world.getPlayerByUuid(playerID));
+		Optional<LivingEntity> owner = Optional.ofNullable(world.getEntityById(ownerID))
+				.filter(ownerValue -> ownerValue instanceof LivingEntity)
+				.map(ownerValue -> (LivingEntity) ownerValue);
 
-		player.ifPresent(playerValue -> LoadEnchantment.unload(playerValue, pos));
+		owner.ifPresent(ownerValue -> unload(ownerValue, pos));
 	}
 
 	@Deprecated private PacketHandlers() {}

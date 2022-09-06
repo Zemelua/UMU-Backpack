@@ -1,6 +1,6 @@
 package io.github.zemelua.umu_backpack.mixin;
 
-import io.github.zemelua.umu_backpack.enchantment.LoadEnchantment;
+import io.github.zemelua.umu_backpack.item.BackpackItem;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
@@ -49,7 +49,7 @@ public abstract class EntityMixin implements Nameable, EntityLike, CommandOutput
 			at = @At("HEAD"),
 			cancellable = true)
 	private void downSizeBoxWhenLoaded(CallbackInfoReturnable<Box> callback) {
-		if (LoadEnchantment.isLoaded((Entity) (Object) this)) {
+		if (BackpackItem.isLoaded((Entity) (Object) this)) {
 			callback.setReturnValue(DIMENSIONS_LOADED.getBoxAt(this.pos));
 		}
 	}

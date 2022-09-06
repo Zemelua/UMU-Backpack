@@ -2,6 +2,7 @@ package io.github.zemelua.umu_backpack.client.event;
 
 import io.github.zemelua.umu_backpack.data.tag.ModTags;
 import io.github.zemelua.umu_backpack.enchantment.LoadEnchantment;
+import io.github.zemelua.umu_backpack.item.BackpackItem;
 import io.github.zemelua.umu_backpack.item.ModItems;
 import io.github.zemelua.umu_backpack.network.NetworkHandler;
 import net.fabricmc.api.Environment;
@@ -19,6 +20,8 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -40,46 +43,25 @@ public class OnEndTick implements ClientTickEvents.EndTick {
 					if (BACKPACK_LOAD_COOLDOWN <= 0) {
 						HitResult target = Objects.requireNonNull(client.crosshairTarget);
 
-						if (player.hasPassengers()) {
+						if (BackpackItem.hasLoad(player)) {
 							switch (target.getType()) {
 								case ENTITY -> {
 									Entity targetEntity = ((EntityHitResult) target).getEntity();
 
 									if (targetEntity.equals(player.getFirstPassenger())) {
-										PacketByteBuf packet = PacketByteBufs.create();
-										packet.writeBoolean(false);
-										ClientPlayNetworking.send(NetworkHandler.CHANNEL_UNLOAD, packet);
-										client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.6F));
+										unLoad(client, null);
 									} else {
 										if (targetEntity.getType().isIn(ModTags.ENTITY_CAN_LOAD) && targetEntity.canStartRiding(player)) {
-											PacketByteBuf unloadPacket = PacketByteBufs.create();
-											unloadPacket.writeBoolean(true);
-											unloadPacket.writeBlockPos(targetEntity.getBlockPos());
-											ClientPlayNetworking.send(NetworkHandler.CHANNEL_UNLOAD, unloadPacket);
-
-											PacketByteBuf loadPacket = PacketByteBufs.create();
-											loadPacket.writeInt(targetEntity.getId());
-
-											ClientPlayNetworking.send(NetworkHandler.CHANNEL_LOAD, loadPacket);
-											client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.6F));
+											load(client, targetEntity);
 										}
 									}
 								}
 								case BLOCK -> {
 									BlockHitResult targetBlock = (BlockHitResult) target;
 
-									PacketByteBuf packet = PacketByteBufs.create();
-									packet.writeBoolean(true);
-									packet.writeBlockPos(targetBlock.getBlockPos().offset(targetBlock.getSide()));
-									ClientPlayNetworking.send(NetworkHandler.CHANNEL_UNLOAD, packet);
-									client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.6F));
+									unLoad(client, targetBlock.getBlockPos().offset(targetBlock.getSide()));
 								}
-								case MISS -> {
-									PacketByteBuf packet = PacketByteBufs.create();
-									packet.writeBoolean(false);
-									ClientPlayNetworking.send(NetworkHandler.CHANNEL_UNLOAD, packet);
-									client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.6F));
-								}
+								case MISS -> unLoad(client, null);
 
 							}
 
@@ -88,11 +70,7 @@ public class OnEndTick implements ClientTickEvents.EndTick {
 								Entity targetEntity = ((EntityHitResult) target).getEntity();
 
 								if (targetEntity.getType().isIn(ModTags.ENTITY_CAN_LOAD) && targetEntity.canStartRiding(player)) {
-									PacketByteBuf loadPacket = PacketByteBufs.create();
-									loadPacket.writeInt(targetEntity.getId());
-
-									ClientPlayNetworking.send(NetworkHandler.CHANNEL_LOAD, loadPacket);
-									client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F));
+									load(client, targetEntity);
 								}
 							}
 						}
@@ -111,6 +89,27 @@ public class OnEndTick implements ClientTickEvents.EndTick {
 		if (BACKPACK_LOAD_COOLDOWN > 0) {
 			BACKPACK_LOAD_COOLDOWN--;
 		}
+	}
+
+	private static void load(MinecraftClient client, Entity target) {
+		PacketByteBuf packet = PacketByteBufs.create();
+		packet.writeInt(target.getId());
+
+		ClientPlayNetworking.send(NetworkHandler.CHANNEL_LOAD, packet);
+		client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F));
+	}
+
+	private static void unLoad(MinecraftClient client, @Nullable BlockPos pos) {
+		PacketByteBuf packet = PacketByteBufs.create();
+		if (pos == null) {
+			packet.writeBoolean(false);
+		} else {
+			packet.writeBoolean(true);
+			packet.writeBlockPos(pos);
+		}
+
+		ClientPlayNetworking.send(NetworkHandler.CHANNEL_UNLOAD, packet);
+		client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.6F));
 	}
 
 	private OnEndTick() {}
