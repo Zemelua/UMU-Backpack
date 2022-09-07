@@ -1,12 +1,11 @@
 package io.github.zemelua.umu_backpack.mixin;
 
+import io.github.zemelua.umu_backpack.util.ModUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -26,15 +25,13 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 		passenger.setPosition(x, y, z);
 	}
 
-	@Unique private static final Identifier MAID = new Identifier("umu_little_maid", "little_maid");
-
 	@Unique
 	private Vec3d getPassengerPos(Entity passenger) {
 		if (passenger.getType().equals(CHICKEN)) {
 			return new Vec3d(-0.33D, 0.0D, 0.0D);
 		} else if (passenger.getType().equals(CAT)) {
 			return new Vec3d(-0.33D, 0.0D, 0.1D);
-		} else if (Registry.ENTITY_TYPE.getId(passenger.getType()).equals(MAID)) {
+		} else if (ModUtils.isLittleMaid(passenger)) {
 			return new Vec3d(-0.24D, 0.1D, 0.0D);
 		}
 
