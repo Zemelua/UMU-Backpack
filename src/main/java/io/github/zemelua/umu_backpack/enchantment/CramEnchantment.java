@@ -6,6 +6,7 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 
+import static io.github.zemelua.umu_backpack.enchantment.ModEnchantments.*;
 import static net.minecraft.enchantment.Enchantment.Rarity.*;
 
 public class CramEnchantment extends Enchantment {
@@ -25,7 +26,12 @@ public class CramEnchantment extends Enchantment {
 
 	@Override
 	public int getMaxPower(int level) {
-		return this.getMinPower(level) + (int) Math.floor(Math.pow(5.0D / level, 2.0D));
+		return this.getMinPower(level) + (int) Math.floor(Math.pow(5.0D / level, 2.0D)) * 4;
+	}
+
+	@Override
+	protected boolean canAccept(Enchantment other) {
+		return !other.equals(LOAD) && !other.equals(this);
 	}
 
 	public static int getLevel(ItemStack itemStack) {

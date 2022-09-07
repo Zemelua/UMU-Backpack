@@ -31,6 +31,11 @@ public class BackProtectionEnchantment extends Enchantment {
 		return this.getMinPower(level) + 9;
 	}
 
+	@Override
+	protected boolean canAccept(Enchantment other) {
+		return !other.equals(LOAD) && !other.equals(this);
+	}
+
 	public static int getLevel(ItemStack itemStack) {
 		return EnchantmentHelper.getLevel(BACK_PROTECTION, itemStack);
 	}
