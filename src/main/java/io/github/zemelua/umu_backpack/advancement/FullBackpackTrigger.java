@@ -23,7 +23,7 @@ public class FullBackpackTrigger extends AbstractCriterion<FullBackpackTrigger.I
 	}
 
 	@Override
-	protected Instance conditionsFromJson(JsonObject obj, EntityPredicate.Extended player, AdvancementEntityPredicateDeserializer predicateDeserializer) {
+	protected Instance conditionsFromJson(JsonObject json, EntityPredicate.Extended player, AdvancementEntityPredicateDeserializer predicateDeserializer) {
 		return new Instance(player);
 	}
 

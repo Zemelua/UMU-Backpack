@@ -1,0 +1,39 @@
+{
+	"parent": "umu_backpack:adventure/backpack",
+	"display": {
+		"title": {
+			"translate": "advancement.umu_backpack.adventure.load_maid.title"
+		},
+		"description": {
+			"translate": "advancement.umu_backpack.adventure.load_maid.description"
+		},
+		"icon": {
+			"item": "umu_backpack:backpack"
+		},
+		"frame": "goal",
+		"show_toast": true,
+		"announce_to_chat": true,
+		"hidden": false
+	},
+	"criteria": {
+		"load_maid": {
+			"trigger": "umu_backpack:load",
+			"conditions": {
+				"load": [
+					{
+						"condition": "minecraft:entity_properties",
+						"entity": "this",
+						"predicate": {
+							"type": "umu_little_maid:little_maid"
+						}
+					}
+				]
+			}
+		}
+	},
+	"requirements": [
+		[
+			"load_maid"
+		]
+	]
+}

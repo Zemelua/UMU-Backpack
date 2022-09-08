@@ -4,6 +4,7 @@
 	"container.umu_backpack.backpack": "バックパック",
 
 	"enchantment.umu_backpack.cram": "整理整頓",
+	"enchantment.umu_backpack.load": "ペットリュック",
 	"enchantment.umu_backpack.back_protection": "不意打ち耐性",
 
 	"advancement.umu_backpack.adventure.backpack.title": "バックパック！",
@@ -12,6 +13,8 @@
 	"advancement.umu_backpack.adventure.max_size_backpack.description": "バックパックを最大まで拡張する",
 	"advancement.umu_backpack.adventure.full_backpack.title": "宝物でいっぱい",
 	"advancement.umu_backpack.adventure.full_backpack.description": "全てのインベントリをアイテムで満たす",
+	"advancement.umu_backpack.adventure.load_maid.title": "立場逆転",
+	"advancement.umu_backpack.adventure.load_maid.description": "メイドさんをバックパックに背負う",
 
 	"key.umu_backpack.backpack": "バックパックの開閉"
 }

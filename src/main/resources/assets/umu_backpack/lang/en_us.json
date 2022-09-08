@@ -4,14 +4,17 @@
 	"container.umu_backpack.backpack": "Backpack",
 
 	"enchantment.umu_backpack.cram": "Cram",
+	"enchantment.umu_backpack.load": "Load",
 	"enchantment.umu_backpack.back_protection": "Back Protection",
 
 	"advancement.umu_backpack.adventure.backpack.title": "Backpack!",
 	"advancement.umu_backpack.adventure.backpack.description": "Equip a backpack",
 	"advancement.umu_backpack.adventure.max_size_backpack.title": "Cram Master",
 	"advancement.umu_backpack.adventure.max_size_backpack.description": "Cram your backpack to maximum",
-	"advancement.umu_backpack.adventure.full_backpack.title": "Full of treasures",
+	"advancement.umu_backpack.adventure.full_backpack.title": "Full of Treasures",
 	"advancement.umu_backpack.adventure.full_backpack.description": "Fill all inventory with items",
+	"advancement.umu_backpack.adventure.load_maid.title": "The Tables Have Turned",
+	"advancement.umu_backpack.adventure.load_maid.description": "Carry a maid on back",
 
 	"key.umu_backpack.backpack": "Open/Close Backpack"
 }

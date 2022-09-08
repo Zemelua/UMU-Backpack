@@ -1,6 +1,7 @@
 package io.github.zemelua.umu_backpack.network;
 
 import io.github.zemelua.umu_backpack.UMUBackpack;
+import io.github.zemelua.umu_backpack.advancement.ModAdvancements;
 import io.github.zemelua.umu_backpack.inventory.BackpackScreenHandler;
 import io.github.zemelua.umu_backpack.item.BackpackItem;
 import net.fabricmc.api.Environment;
@@ -52,6 +53,8 @@ public final class PacketHandlers {
 		Optional<Entity> entity = Optional.ofNullable(player.getWorld().getEntityById(targetID));
 		entity.ifPresent(entityValue -> {
 			load(player, entityValue);
+
+			ModAdvancements.TRIGGER_LOAD.trigger(player, entityValue);
 
 			PacketByteBuf packet = PacketByteBufs.create();
 			packet.writeInt(player.getId());
