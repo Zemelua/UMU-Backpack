@@ -42,8 +42,6 @@ public class BackpackItem extends DyeableArmorItem {
 	}
 
 	public static Optional<Entity> getLoad(LivingEntity owner) {
-		if (!LoadEnchantment.has(owner)) return Optional.empty();
-
 		return Optional.ofNullable(owner.hasPrimaryPassenger()
 				? owner.getPrimaryPassenger()
 				: owner.getFirstPassenger());

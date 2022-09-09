@@ -2,7 +2,6 @@ package io.github.zemelua.umu_backpack.mixin;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.zemelua.umu_backpack.item.BackpackItem;
-import io.github.zemelua.umu_backpack.item.ModItems;
 import io.github.zemelua.umu_backpack.network.NetworkHandler;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -23,6 +22,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import static io.github.zemelua.umu_backpack.item.BackpackItem.*;
+import static io.github.zemelua.umu_backpack.item.ModItems.*;
 
 @Mixin(PlayerScreenHandler.class)
 public abstract class PlayerScreenHandlerMixin extends AbstractRecipeScreenHandler<CraftingInventory> {
@@ -57,7 +59,7 @@ public abstract class PlayerScreenHandlerMixin extends AbstractRecipeScreenHandl
 				if (itemStack.isEmpty()) return true;
 				if (player.isCreative()) return true;
 
-				if (itemStack.isOf(ModItems.BACKPACK)) {
+				if (itemStack.isOf(BACKPACK)) {
 					if (!BackpackItem.getInventory(itemStack).isEmpty()) return false;
 					if (BackpackItem.hasLoad(player)) return false;
 				}
@@ -67,7 +69,7 @@ public abstract class PlayerScreenHandlerMixin extends AbstractRecipeScreenHandl
 
 			@Override
 			public void onTakeItem(PlayerEntity player, ItemStack stack) {
-				if (BackpackItem.hasLoad(player)) {
+				if (stack.isOf(BACKPACK) && getLoad(player).isPresent()) {
 					PacketByteBuf packet = PacketByteBufs.create();
 					packet.writeBoolean(false);
 
