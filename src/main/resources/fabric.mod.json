@@ -20,7 +20,7 @@
 	"depends": {
 		"fabricloader": ">=0.14.9",
 		"fabric": "*",
-		"minecraft": "{$depends_minecraft_version}"
+		"minecraft": "1.19.x"
 	},
 	"accessWidener": "umu_backpack.accesswidener"
 }
