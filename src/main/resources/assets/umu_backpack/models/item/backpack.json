@@ -3,5 +3,13 @@
 	"textures": {
 		"layer0": "umu_backpack:item/backpack",
 		"layer1": "umu_backpack:item/backpack_overlay"
-	}
+	},
+	"overrides": [
+		{
+			"predicate": {
+				"umu_backpack:locked": 1.0
+			},
+			"model": "umu_backpack:item/backpack_locked"
+		}
+	]
 }

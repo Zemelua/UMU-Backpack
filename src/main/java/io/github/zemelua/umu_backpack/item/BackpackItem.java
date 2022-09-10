@@ -104,13 +104,17 @@ public class BackpackItem extends DyeableArmorItem {
 		return passenger.equals(load);
 	}
 
+	public static boolean isLocked(PlayerEntity player, ItemStack backpack) {
+		return BackpackItem.hasLoad(player) || !BackpackItem.getInventory(backpack).isEmpty();
+	}
+
 	public static final class BackpackInventory implements net.minecraft.inventory.Inventory {
-		private final ItemStack itemStack;
+		private final ItemStack backpack;
 		private final DefaultedList<ItemStack> itemStacks = DefaultedList.ofSize(SIZE, ItemStack.EMPTY);
 
-		private BackpackInventory(ItemStack itemStack) {
-			this.itemStack = itemStack;
-			Inventories.readNbt(this.itemStack.getOrCreateNbt(), this.itemStacks);
+		private BackpackInventory(ItemStack backpack) {
+			this.backpack = backpack;
+			Inventories.readNbt(this.backpack.getOrCreateNbt(), this.itemStacks);
 		}
 
 		public Stream<ItemStack> getItemStacks() {
@@ -168,7 +172,9 @@ public class BackpackItem extends DyeableArmorItem {
 
 		@Override
 		public void markDirty() {
-			NbtCompound nbt = this.itemStack.getOrCreateNbt();
+			// UMUBackpack.LOGGER.info(this.backpack.hasNbt());
+
+			NbtCompound nbt = this.backpack.getOrCreateNbt();
 			Inventories.writeNbt(nbt, this.itemStacks);
 		}
 

@@ -1,7 +1,6 @@
 package io.github.zemelua.umu_backpack.mixin;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.zemelua.umu_backpack.item.BackpackItem;
 import io.github.zemelua.umu_backpack.network.NetworkHandler;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -60,8 +59,7 @@ public abstract class PlayerScreenHandlerMixin extends AbstractRecipeScreenHandl
 				if (player.isCreative()) return true;
 
 				if (itemStack.isOf(BACKPACK)) {
-					if (!BackpackItem.getInventory(itemStack).isEmpty()) return false;
-					if (BackpackItem.hasLoad(player)) return false;
+					if (isLocked(player, itemStack)) return false;
 				}
 
 				return !EnchantmentHelper.hasBindingCurse(itemStack);

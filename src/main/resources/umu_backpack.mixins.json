@@ -5,8 +5,7 @@
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
 		"EnchantmentTargetMixin", "EntityMixin", "ItemStackMixin", "LivingEntityMixin",
-		"PlayerEntityMixin", "PlayerManagerMixin", "PlayerScreenHandlerMixin",
-		"ServerPlayerEntityMixin"
+		"PlayerEntityMixin", "PlayerManagerMixin", "PlayerScreenHandlerMixin", "ServerPlayerEntityMixin"
 	],
 	"client": [ "LivingEntityRendererMixin" ],
 	"injectors": {

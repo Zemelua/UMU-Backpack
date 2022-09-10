@@ -34,6 +34,10 @@ public class CramEnchantment extends Enchantment {
 		return !other.equals(LOAD) && !other.equals(this);
 	}
 
+	public static boolean has(ItemStack backpack) {
+		return getLevel(backpack) > 0;
+	}
+
 	public static int getLevel(ItemStack itemStack) {
 		return EnchantmentHelper.getLevel(ModEnchantments.CRAM, itemStack);
 	}
