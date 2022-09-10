@@ -1,9 +1,6 @@
 package io.github.zemelua.umu_backpack.mixin;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.zemelua.umu_backpack.network.NetworkHandler;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.mob.MobEntity;
@@ -11,7 +8,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.AbstractRecipeScreenHandler;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
@@ -63,18 +59,6 @@ public abstract class PlayerScreenHandlerMixin extends AbstractRecipeScreenHandl
 				}
 
 				return !EnchantmentHelper.hasBindingCurse(itemStack);
-			}
-
-			@Override
-			public void onTakeItem(PlayerEntity player, ItemStack stack) {
-				if (stack.isOf(BACKPACK) && getLoad(player).isPresent()) {
-					PacketByteBuf packet = PacketByteBufs.create();
-					packet.writeBoolean(false);
-
-					ClientPlayNetworking.send(NetworkHandler.CHANNEL_UNLOAD, packet);
-				}
-
-				this.markDirty();
 			}
 
 			@Override

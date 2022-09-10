@@ -172,8 +172,6 @@ public class BackpackItem extends DyeableArmorItem {
 
 		@Override
 		public void markDirty() {
-			// UMUBackpack.LOGGER.info(this.backpack.hasNbt());
-
 			NbtCompound nbt = this.backpack.getOrCreateNbt();
 			Inventories.writeNbt(nbt, this.itemStacks);
 		}
