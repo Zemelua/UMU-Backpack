@@ -17,9 +17,8 @@ public final class NetworkHandler {
 	public static final Identifier CHANNEL_SYNC_YAW = UMUBackpack.identifier("sync_yaw");
 
 	public static void initializeServer() {
-		ServerPlayNetworking.registerGlobalReceiver(NetworkHandler.CHANNEL_OPEN_BACKPACK, (server, player, handler, buf, responseSender) -> {
-			server.execute(() -> PacketHandlers.openBackpack(player));
-		});
+		ServerPlayNetworking.registerGlobalReceiver(NetworkHandler.CHANNEL_OPEN_BACKPACK, (server, player, handler, buf, responseSender)
+				-> server.execute(() -> PacketHandlers.openBackpack(player)));
 		ServerPlayNetworking.registerGlobalReceiver(NetworkHandler.CHANNEL_LOAD, (server, player, handler, packet, responseSender) -> {
 			final int targetID = packet.readInt();
 

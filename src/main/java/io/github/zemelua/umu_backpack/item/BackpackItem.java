@@ -24,7 +24,7 @@ import static net.minecraft.item.ArmorMaterials.*;
 
 public class BackpackItem extends DyeableArmorItem {
 	public static final String NBT_KEY = "Load";
-	public static int SIZE = 54;
+	public static final int SIZE = 54;
 
 	public BackpackItem() {
 		super(LEATHER, CHEST, new Item.Settings().group(ItemGroup.TOOLS));
@@ -128,7 +128,7 @@ public class BackpackItem extends DyeableArmorItem {
 
 		@Override
 		public boolean isEmpty() {
-			for (int i = 0; i < size(); i++) {
+			for (int i = 0; i < this.size(); i++) {
 				ItemStack itemStack = this.getStack(i);
 
 				if (!itemStack.isEmpty()) {
@@ -165,8 +165,8 @@ public class BackpackItem extends DyeableArmorItem {
 		public void setStack(int slot, ItemStack stack) {
 			this.itemStacks.set(slot, stack);
 
-			if (stack.getCount() > getMaxCountPerStack()) {
-				stack.setCount(getMaxCountPerStack());
+			if (stack.getCount() > this.getMaxCountPerStack()) {
+				stack.setCount(this.getMaxCountPerStack());
 			}
 		}
 
