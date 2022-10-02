@@ -1,11 +1,14 @@
 package io.github.zemelua.umu_backpack.client;
 
+import com.terraformersmc.modmenu.api.ConfigScreenFactory;
+import com.terraformersmc.modmenu.api.ModMenuApi;
 import io.github.zemelua.umu_backpack.client.event.OnEndTick;
 import io.github.zemelua.umu_backpack.client.gui.BackpackScreen;
 import io.github.zemelua.umu_backpack.client.renderer.armor.BackpackRenderer;
 import io.github.zemelua.umu_backpack.inventory.ModInventories;
 import io.github.zemelua.umu_backpack.item.BackpackItem;
 import io.github.zemelua.umu_backpack.network.NetworkHandler;
+import io.github.zemelua.umu_config.config.ConfigManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -25,7 +28,7 @@ import static io.github.zemelua.umu_backpack.item.ModItems.*;
 import static net.fabricmc.api.EnvType.*;
 
 @Environment(CLIENT)
-public class UMUBackpackClient implements ClientModInitializer {
+public class UMUBackpackClient implements ClientModInitializer, ModMenuApi {
 	public static final KeyBinding KEY_BACKPACK = new KeyBinding(
 			"key.umu_backpack.backpack",
 			InputUtil.Type.KEYSYM,
@@ -54,5 +57,10 @@ public class UMUBackpackClient implements ClientModInitializer {
 		NetworkHandler.initializeClient();
 
 		KeyBindingHelper.registerKeyBinding(KEY_BACKPACK);
+	}
+
+	@Override
+	public ConfigScreenFactory<?> getModConfigScreenFactory() {
+		return parent -> ConfigManager.openConfigScreen(parent, MOD_ID).orElse(null);
 	}
 }

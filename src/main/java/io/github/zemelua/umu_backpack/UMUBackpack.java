@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class UMUBackpack implements ModInitializer {
+	public static final String MOD_ID = "umu_backpack";
 	public static final Logger LOGGER = LogManager.getLogger("UMU Backpack");
 
 	@Override

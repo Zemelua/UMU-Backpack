@@ -11,19 +11,22 @@ loom {
 }
 
 repositories {
-	maven {
-		url('https://jitpack.io')
-	}
+	maven { url('https://jitpack.io')}
+	maven { url('https://maven.shedaniel.me/')}
+	maven { url('https://maven.terraformersmc.com/releases/')}
 }
 
 dependencies {
 	minecraft(group: 'com.mojang', name: 'minecraft', version: project.minecraft_version)
 	mappings(group: 'net.fabricmc', name: 'yarn', version: project.yarn_mappings, classifier: 'v2')
-
 	modImplementation(group: 'net.fabricmc', name: 'fabric-loader', version: project.loader_version)
 	modImplementation(group: 'net.fabricmc.fabric-api', name: 'fabric-api', version: project.fabric_version)
 
 	modImplementation(include(group: 'com.github.Chocohead', name: 'fabric-asm', version: 'v2.3'))
+	modCompileOnly(group: 'com.terraformersmc', name: 'modmenu', version: project.modmenu_version) { transitive(false) }
+	modRuntimeOnly(group: 'com.terraformersmc', name: 'modmenu', version: project.modmenu_version) { transitive(false) }
+	modCompileOnly(group: 'com.github.Zemelua', name: 'UMU-Config', version: project.umu_config_version) { transitive(false) }
+	modRuntimeOnly(group: 'com.github.Zemelua', name: 'UMU-Config', version: project.umu_config_version) { transitive(false) }
 }
 
 processResources {

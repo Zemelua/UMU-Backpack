@@ -12,6 +12,8 @@
 	"entrypoints": {
 		"main": [ "io.github.zemelua.umu_backpack.UMUBackpack" ],
 		"client": [ "io.github.zemelua.umu_backpack.client.UMUBackpackClient" ],
+		"modmenu": [ "io.github.zemelua.umu_backpack.client.UMUBackpackClient" ],
+		"umu-config": [ "io.github.zemelua.umu_backpack.ModConfigs" ],
 		"mm:early_risers": [ "io.github.zemelua.umu_backpack.tinker.EarlyRiser" ]
 	},
 	"mixins": [
