@@ -1,5 +1,6 @@
 package io.github.zemelua.umu_backpack.enchantment;
 
+import io.github.zemelua.umu_backpack.ModConfigs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentTarget;
@@ -10,7 +11,7 @@ import static io.github.zemelua.umu_backpack.enchantment.ModEnchantments.*;
 import static net.minecraft.enchantment.Enchantment.Rarity.*;
 
 public class CramEnchantment extends Enchantment {
-	protected CramEnchantment(EnchantmentTarget type) {
+	public CramEnchantment(EnchantmentTarget type) {
 		super(RARE, type, new EquipmentSlot[]{EquipmentSlot.CHEST});
 	}
 
@@ -34,11 +35,12 @@ public class CramEnchantment extends Enchantment {
 		return !other.equals(LOAD) && !other.equals(this);
 	}
 
-	public static boolean has(ItemStack backpack) {
-		return getLevel(backpack) > 0;
+	@Override
+	public Rarity getRarity() {
+		return ModConfigs.CRAM_ENCHANTMENT_RARITY.getValue();
 	}
 
 	public static int getLevel(ItemStack itemStack) {
-		return EnchantmentHelper.getLevel(ModEnchantments.CRAM, itemStack);
+		return EnchantmentHelper.getLevel(CRAM, itemStack);
 	}
 }

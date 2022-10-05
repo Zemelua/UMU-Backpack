@@ -1,5 +1,6 @@
 package io.github.zemelua.umu_backpack.item;
 
+import io.github.zemelua.umu_backpack.ModConfigs;
 import io.github.zemelua.umu_backpack.enchantment.LoadEnchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
@@ -105,6 +106,8 @@ public class BackpackItem extends DyeableArmorItem {
 	}
 
 	public static boolean isLocked(PlayerEntity player, ItemStack backpack) {
+		if (ModConfigs.FREELY_DETACH.getValue()) return false;
+
 		return BackpackItem.hasLoad(player) || !BackpackItem.getInventory(backpack).isEmpty();
 	}
 

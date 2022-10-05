@@ -1,5 +1,6 @@
 package io.github.zemelua.umu_backpack.enchantment;
 
+import io.github.zemelua.umu_backpack.ModConfigs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentTarget;
@@ -12,7 +13,7 @@ import static net.minecraft.enchantment.Enchantment.Rarity.*;
 import static net.minecraft.entity.EquipmentSlot.*;
 
 public class LoadEnchantment extends Enchantment {
-	protected LoadEnchantment(EnchantmentTarget type) {
+	public LoadEnchantment(EnchantmentTarget type) {
 		super(VERY_RARE, type, new EquipmentSlot[]{EquipmentSlot.CHEST});
 	}
 
@@ -34,6 +35,11 @@ public class LoadEnchantment extends Enchantment {
 	@Override
 	protected boolean canAccept(Enchantment other) {
 		return !other.equals(CRAM) && !other.equals(BACK_PROTECTION) && !other.equals(this);
+	}
+
+	@Override
+	public Rarity getRarity() {
+		return ModConfigs.LOAD_ENCHANTMENT_RARITY.getValue();
 	}
 
 	public static boolean has(ItemStack itemStack) {

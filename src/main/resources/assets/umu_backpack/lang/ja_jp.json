@@ -1,12 +1,9 @@
 {
 	"item.umu_backpack.backpack": "バックパック",
-
 	"container.umu_backpack.backpack": "バックパック",
-
 	"enchantment.umu_backpack.cram": "整理整頓",
 	"enchantment.umu_backpack.load": "ペットリュック",
 	"enchantment.umu_backpack.back_protection": "不意打ち耐性",
-
 	"advancement.umu_backpack.adventure.backpack.title": "バックパック！",
 	"advancement.umu_backpack.adventure.backpack.description": "バックパックを装備する",
 	"advancement.umu_backpack.adventure.max_size_backpack.title": "整理整頓の達人",
@@ -15,6 +12,26 @@
 	"advancement.umu_backpack.adventure.full_backpack.description": "全てのインベントリをアイテムで満たす",
 	"advancement.umu_backpack.adventure.load_maid.title": "立場逆転",
 	"advancement.umu_backpack.adventure.load_maid.description": "メイドさんをバックパックに背負う",
-
-	"key.umu_backpack.backpack": "バックパックの開閉"
+	"key.umu_backpack.backpack": "バックパックの開閉",
+	"config.umu_backpack.umu_backpack": "設定",
+	"config.value.umu_backpack.freely_detach": "自由な取り外し",
+	"config.value.umu_backpack.cram_enchantment_rarity": "整理整頓エンチャントのレア度",
+	"config.value.umu_backpack.load_enchantment_rarity": "ペットリュックエンチャントのレア度",
+	"config.value.umu_backpack.back_protection_enchantment_rarity": "不意打ち耐性エンチャントのレア度",
+	"config.value.tooltip.umu_backpack.freely_detach": "オンのとき、もしくはクリエイティブモードのとき、いつでもバックパックを取り外すことができます。オフのとき、サバイバルモードでは、バックパックにアイテムが入っているか、動物を背負っている場合に取り外すことができません。",
+	"config.value.tooltip.umu_backpack.cram_enchantment_rarity": "エンチャントテーブルで整理整頓エンチャントが適用される頻度を決定します。エンチャントシステムは複雑なアルゴリズムを経て行われるため、これは一定の確率を保障するものではありません。",
+	"config.value.tooltip.umu_backpack.load_enchantment_rarity": "エンチャントテーブルでペットリュックエンチャントが適用される頻度を決定します。エンチャントシステムは複雑なアルゴリズムを経て行われるため、これは一定の確率を保障するものではありません。",
+	"config.value.tooltip.umu_backpack.back_protection_enchantment_rarity": "エンチャントテーブルで不意打ち耐性エンチャントが適用される頻度を決定します。エンチャントシステムは複雑なアルゴリズムを経て行われるため、これは一定の確率を保障するものではありません。",
+	"config.enum.umu_backpack.cram_enchantment_rarity.0": "レアじゃない",
+	"config.enum.umu_backpack.cram_enchantment_rarity.1": "ちょっとレア",
+	"config.enum.umu_backpack.cram_enchantment_rarity.2": "レア",
+	"config.enum.umu_backpack.cram_enchantment_rarity.3": "かなりレア",
+	"config.enum.umu_backpack.load_enchantment_rarity.0": "レアじゃない",
+	"config.enum.umu_backpack.load_enchantment_rarity.1": "ちょっとレア",
+	"config.enum.umu_backpack.load_enchantment_rarity.2": "レア",
+	"config.enum.umu_backpack.load_enchantment_rarity.3": "かなりレア",
+	"config.enum.umu_backpack.back_protection_enchantment_rarity.0": "レアじゃない",
+	"config.enum.umu_backpack.back_protection_enchantment_rarity.1": "ちょっとレア",
+	"config.enum.umu_backpack.back_protection_enchantment_rarity.2": "レア",
+	"config.enum.umu_backpack.back_protection_enchantment_rarity.3": "かなりレア"
 }

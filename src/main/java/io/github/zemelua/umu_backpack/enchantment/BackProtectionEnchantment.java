@@ -1,5 +1,6 @@
 package io.github.zemelua.umu_backpack.enchantment;
 
+import io.github.zemelua.umu_backpack.ModConfigs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentTarget;
@@ -34,6 +35,11 @@ public class BackProtectionEnchantment extends Enchantment {
 	@Override
 	protected boolean canAccept(Enchantment other) {
 		return !other.equals(LOAD) && !other.equals(this);
+	}
+
+	@Override
+	public Rarity getRarity() {
+		return ModConfigs.BACK_ENCHANTMENT_PROTECTION_RARITY.getValue();
 	}
 
 	public static int getLevel(ItemStack itemStack) {
