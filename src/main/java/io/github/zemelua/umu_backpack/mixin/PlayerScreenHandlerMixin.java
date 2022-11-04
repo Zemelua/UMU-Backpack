@@ -21,6 +21,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static io.github.zemelua.umu_backpack.item.BackpackItem.*;
 import static io.github.zemelua.umu_backpack.item.ModItems.*;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 @Mixin(PlayerScreenHandler.class)
 public abstract class PlayerScreenHandlerMixin extends AbstractRecipeScreenHandler<CraftingInventory> {
 	@Inject(method = "<init>",
@@ -31,12 +34,25 @@ public abstract class PlayerScreenHandlerMixin extends AbstractRecipeScreenHandl
 				this.id = 6;
 			}
 
-			@Override
-			public void setStack(ItemStack stack) {
-				ItemStack itemStack = this.getStack();
-				super.setStack(stack);
-				owner.onEquipStack(EquipmentSlot.CHEST, itemStack, stack);
-			}
+            @Override
+            public void setStack(ItemStack stack) {
+                ItemStack itemStack = this.getStack();
+                super.setStack(stack);
+                try {
+                    Method method = PlayerEntity.class.getDeclaredMethod("onEquipStack");
+                    method.setAccessible(true);
+					method.invoke(owner,itemStack);
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NoSuchMethodException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            }
 
 			@Override
 			public int getMaxItemCount() {
