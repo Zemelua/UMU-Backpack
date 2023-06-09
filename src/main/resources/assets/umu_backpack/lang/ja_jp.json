@@ -33,5 +33,6 @@
 	"config.enum.umu_backpack.back_protection_enchantment_rarity.0": "レアじゃない",
 	"config.enum.umu_backpack.back_protection_enchantment_rarity.1": "ちょっとレア",
 	"config.enum.umu_backpack.back_protection_enchantment_rarity.2": "レア",
-	"config.enum.umu_backpack.back_protection_enchantment_rarity.3": "かなりレア"
+	"config.enum.umu_backpack.back_protection_enchantment_rarity.3": "かなりレア",
+	"modmenu.descriptionTranslation.umu_config": "シンプルなバックパックMOD。小さな動物をバックパックに背負って運ぶこともできちゃいます。"
 }

@@ -2,10 +2,21 @@
 	"schemaVersion": 1,
 	"id": "umu_backpack",
 	"version": "${version}",
-	"name": "UMU Backpack fabric",
-	"description": "",
-	"authors": [ ],
-	"contact": { },
+	"name": "UMU Backpack",
+	"description": "A simple backpack mod. Small animals can also be carried in backpacks.",
+	"authors": [
+		{
+			"name": "Zemelua",
+			"contact": {
+				"discord": "https://discord.com/users/553421324589072394"
+			}
+		}
+	],
+	"contact": {
+		"discord": "https://discord.com/invite/B6uYQW9Kwg",
+		"sources": "https://github.com/Zemelua/UMU-Backpack",
+		"issues": "https://github.com/Zemelua/UMU-Backpack/issues"
+	},
 	"license": "MIT",
 	"icon": "assets/umu_backpack/icon.png",
 	"environment": "*",
@@ -24,5 +35,15 @@
 		"fabric": "*",
 		"minecraft": "1.19.x"
 	},
-	"accessWidener": "umu_backpack.accesswidener"
+	"accessWidener": "umu_backpack.accesswidener",
+	"suggests": {
+		"modmenu": "*"
+	},
+	"custom": {
+		"modmenu": {
+			"links": {
+				"modmenu.discord": "https://discord.com/invite/B6uYQW9Kwg"
+			}
+		}
+	}
 }
