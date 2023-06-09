@@ -1,6 +1,5 @@
 package io.github.zemelua.umu_backpack.item;
 
-import io.github.zemelua.umu_backpack.ModConfigs;
 import io.github.zemelua.umu_backpack.enchantment.LoadEnchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
@@ -43,7 +42,7 @@ public class BackpackItem extends DyeableArmorItem {
 	}
 
 	public static Optional<Entity> getLoad(LivingEntity owner) {
-		return Optional.ofNullable(owner.hasPrimaryPassenger()
+		return Optional.ofNullable(Objects.nonNull(owner.getPrimaryPassenger())
 				? owner.getPrimaryPassenger()
 				: owner.getFirstPassenger());
 	}
@@ -91,6 +90,10 @@ public class BackpackItem extends DyeableArmorItem {
 		}
 	}
 
+	public static boolean isLocked(PlayerEntity player, ItemStack backpack) {
+        return BackpackItem.hasLoad(player) || !BackpackItem.getInventory(backpack).isEmpty();
+    }
+
 	public static boolean isLoaded(Entity passenger) {
 		if (!passenger.hasVehicle()) return false;
 
@@ -98,17 +101,11 @@ public class BackpackItem extends DyeableArmorItem {
 		if (!(vehicle instanceof LivingEntity living)) return false;
 		if (!living.getEquippedStack(CHEST).isOf(BACKPACK)) return false;
 
-		Entity load = Objects.requireNonNull(vehicle.hasPrimaryPassenger()
-				? vehicle.getPrimaryPassenger()
-				: vehicle.getFirstPassenger());
+		Entity load = Objects.requireNonNull(Objects.nonNull(vehicle.getPrimaryPassenger())
+                ? vehicle.getPrimaryPassenger()
+                : vehicle.getFirstPassenger());
 
 		return passenger.equals(load);
-	}
-
-	public static boolean isLocked(PlayerEntity player, ItemStack backpack) {
-		if (ModConfigs.FREELY_DETACH.getValue()) return false;
-
-		return BackpackItem.hasLoad(player) || !BackpackItem.getInventory(backpack).isEmpty();
 	}
 
 	public static final class BackpackInventory implements net.minecraft.inventory.Inventory {
