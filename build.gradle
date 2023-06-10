@@ -23,10 +23,8 @@ dependencies {
 	modImplementation(group: 'net.fabricmc.fabric-api', name: 'fabric-api', version: project.fabric_version)
 
 	modImplementation(include(group: 'com.github.Chocohead', name: 'fabric-asm', version: 'v2.3'))
-	modCompileOnly(group: 'com.terraformersmc', name: 'modmenu', version: project.modmenu_version) { transitive(false) }
-	modRuntimeOnly(group: 'com.terraformersmc', name: 'modmenu', version: project.modmenu_version) { transitive(false) }
-	modCompileOnly(group: 'com.github.Zemelua', name: 'UMU-Config', version: project.umu_config_version) { transitive(false) }
-	modRuntimeOnly(group: 'com.github.Zemelua', name: 'UMU-Config', version: project.umu_config_version) { transitive(false) }
+	modImplementation(group: 'com.terraformersmc', name: 'modmenu', version: project.modmenu_version)
+	modImplementation(group: 'com.github.Zemelua', name: 'UMU-Config', version: 'main-SNAPSHOT')
 }
 
 processResources {

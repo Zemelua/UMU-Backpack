@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -74,15 +75,15 @@ public final class PacketHandlers {
 		if (pos == null) {
 			packet.writeBoolean(false);
 
-			for (ServerPlayerEntity tracking : PlayerLookup.tracking(player.getWorld(), player.getBlockPos())) {
+			for (ServerPlayerEntity tracking : PlayerLookup.tracking((ServerWorld) player.getWorld(), player.getBlockPos())) {
 				ServerPlayNetworking.send(tracking, CHANNEL_UNLOAD_TO_CLIENT, packet);
 			}
 		} else {
 			packet.writeBoolean(true);
 			packet.writeBlockPos(pos);
 
-			for (ServerPlayerEntity tracking : player.getWorld().getPlayers()) {
-				ServerPlayNetworking.send(tracking, CHANNEL_UNLOAD_TO_CLIENT, packet);
+			for (PlayerEntity tracking : player.getWorld().getPlayers()) {
+				ServerPlayNetworking.send((ServerPlayerEntity) tracking, CHANNEL_UNLOAD_TO_CLIENT, packet);
 			}
 		}
 	}

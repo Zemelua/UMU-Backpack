@@ -2,8 +2,8 @@ package io.github.zemelua.umu_backpack.data.tag;
 
 import io.github.zemelua.umu_backpack.UMUBackpack;
 import net.minecraft.entity.EntityType;
-import net.minecraft.tag.TagKey;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +17,7 @@ public final class ModTags {
 	}
 
 	static {
-		ENTITY_CAN_LOAD = TagKey.of(Registry.ENTITY_TYPE_KEY, UMUBackpack.identifier("can_load"));
+		ENTITY_CAN_LOAD = TagKey.of(RegistryKeys.ENTITY_TYPE, UMUBackpack.identifier("can_load"));
 	}
 
 	@Deprecated private ModTags() {}

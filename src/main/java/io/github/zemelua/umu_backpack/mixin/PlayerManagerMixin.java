@@ -46,11 +46,11 @@ public abstract class PlayerManagerMixin {
 			at = @At(value = "INVOKE",
 					target = "Lnet/minecraft/server/network/ServerPlayerEntity;sendServerMetadata(Lnet/minecraft/server/ServerMetadata;)V",
 					ordinal = 0),
-			index = 7)
+			index = 6)
 	@SuppressWarnings("SpellCheckingInspection")
 	private NbtCompound spawnLoadOnPlayerConnect(NbtCompound playerNBT, ClientConnection connection, ServerPlayerEntity player) {
 		if (playerNBT != null) {
-			ServerWorld world = player.getWorld();
+			ServerWorld world = (ServerWorld) player.getWorld();
 
 			if (playerNBT.contains(BackpackItem.NBT_KEY, COMPOUND_TYPE)) {
 				NbtCompound loadNBT = playerNBT.getCompound(BackpackItem.NBT_KEY);

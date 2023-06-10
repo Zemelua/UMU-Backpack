@@ -9,6 +9,7 @@ import net.minecraft.loot.context.LootContext;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateSerializer;
 import net.minecraft.predicate.entity.EntityPredicate;
+import net.minecraft.predicate.entity.LootContextPredicate;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
@@ -23,8 +24,8 @@ public class LoadTrigger extends AbstractCriterion<LoadTrigger.Instance> {
 	}
 
 	@Override
-	protected Instance conditionsFromJson(JsonObject json, EntityPredicate.Extended player, AdvancementEntityPredicateDeserializer deserializer) {
-		EntityPredicate.Extended loadPredicate = EntityPredicate.Extended.getInJson(json, KEY_LOAD, deserializer);
+	protected Instance conditionsFromJson(JsonObject json, LootContextPredicate player, AdvancementEntityPredicateDeserializer deserializer) {
+		LootContextPredicate loadPredicate = EntityPredicate.contextPredicateFromJson(json, KEY_LOAD, deserializer);
 
 		return new Instance(player, loadPredicate);
 	}
@@ -35,9 +36,9 @@ public class LoadTrigger extends AbstractCriterion<LoadTrigger.Instance> {
 	}
 
 	public static class Instance extends AbstractCriterionConditions {
-		private final EntityPredicate.Extended loadPredicate;
+		private final LootContextPredicate loadPredicate;
 
-		public Instance(EntityPredicate.Extended entity, EntityPredicate.Extended loadPredicate) {
+		public Instance(LootContextPredicate entity, LootContextPredicate loadPredicate) {
 			super(ID, entity);
 
 			this.loadPredicate = loadPredicate;

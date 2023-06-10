@@ -1,8 +1,10 @@
 package io.github.zemelua.umu_backpack.inventory;
 
 import io.github.zemelua.umu_backpack.UMUBackpack;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,7 +18,7 @@ public final class ModInventories {
 	}
 
 	static {
-		BACKPACK = Registry.register(Registry.SCREEN_HANDLER, UMUBackpack.identifier("backpack"), new ScreenHandlerType<>(BackpackScreenHandler::new));
+		BACKPACK = Registry.register(Registries.SCREEN_HANDLER, UMUBackpack.identifier("backpack"), new ScreenHandlerType<>(BackpackScreenHandler::new, FeatureFlags.VANILLA_FEATURES));
 	}
 
 	@Deprecated private ModInventories() {}

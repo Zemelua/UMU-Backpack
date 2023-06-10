@@ -33,10 +33,10 @@ public abstract class LivingEntityMixin extends Entity {
 	@Inject(method = "onDeath",
 			at = @At("HEAD"))
 	private void scatterBackpackInventory(DamageSource damageSource, CallbackInfo callback) {
-		if (!this.world.isClient()) {
+		if (!this.getWorld().isClient()) {
 			ItemStack itemStack = this.getEquippedStack(CHEST);
 			BackpackInventory inventory = BackpackItem.getInventory(itemStack);
-			ItemScatterer.spawn(this.world, this, inventory);
+			ItemScatterer.spawn(this.getWorld(), this, inventory);
 			inventory.clear();
 			inventory.markDirty();
 		}
@@ -53,7 +53,7 @@ public abstract class LivingEntityMixin extends Entity {
 	private void calculateDamageThroughBackProtection(DamageSource source, float amount, CallbackInfoReturnable<Float> callback) {
 		int backProtectionLevel = BackProtectionEnchantment.getLevel((LivingEntity) (Object) this);
 
-		if (backProtectionLevel > 0 && !source.bypassesArmor()) {
+		if (backProtectionLevel > 0 && !source.isIndirect()) {
 			@Nullable Vec3d damagePos = source.getPosition();
 			if (damagePos == null) return;
 

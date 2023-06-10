@@ -43,7 +43,7 @@ public class BackpackRenderer implements ArmorRenderer {
 		BipedEntityModel<LivingEntity> model = isOpen
 				? LIVING_LARGE_MODELS.computeIfAbsent(entity.getId(), id -> new LargeBackpackModel())
 				: LIVING_MODELS.computeIfAbsent(entity.getId(), id -> new BackpackModel());
-		contextModel.setAttributes(model);
+		contextModel.copyBipedStateTo(model);
 		model.setVisible(false);
 		model.body.visible = true;
 		model.rightArm.visible = true;

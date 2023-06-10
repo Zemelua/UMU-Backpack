@@ -2,7 +2,9 @@ package io.github.zemelua.umu_backpack.item;
 
 import io.github.zemelua.umu_backpack.ModConfigs;
 import io.github.zemelua.umu_backpack.enchantment.LoadEnchantment;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,16 +21,12 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static io.github.zemelua.umu_backpack.item.ModItems.*;
-import static net.minecraft.entity.EquipmentSlot.*;
-import static net.minecraft.item.ArmorMaterials.*;
-
 public class BackpackItem extends DyeableArmorItem {
 	public static final String NBT_KEY = "Load";
 	public static final int SIZE = 54;
 
 	public BackpackItem() {
-		super(LEATHER, CHEST, new Item.Settings().group(ItemGroup.TOOLS));
+		super(ArmorMaterials.LEATHER, Type.CHESTPLATE, new FabricItemSettings());
 	}
 
 	@Override
@@ -43,8 +41,8 @@ public class BackpackItem extends DyeableArmorItem {
 	}
 
 	public static Optional<Entity> getLoad(LivingEntity owner) {
-		return Optional.ofNullable(owner.hasPrimaryPassenger()
-				? owner.getPrimaryPassenger()
+		return Optional.ofNullable(owner.hasControllingPassenger()
+				? owner.getControllingPassenger()
 				: owner.getFirstPassenger());
 	}
 	/**
@@ -96,10 +94,10 @@ public class BackpackItem extends DyeableArmorItem {
 
 		Entity vehicle = Objects.requireNonNull(passenger.getVehicle());
 		if (!(vehicle instanceof LivingEntity living)) return false;
-		if (!living.getEquippedStack(CHEST).isOf(BACKPACK)) return false;
+		if (!living.getEquippedStack(EquipmentSlot.CHEST).isOf(ModItems.BACKPACK)) return false;
 
-		Entity load = Objects.requireNonNull(vehicle.hasPrimaryPassenger()
-				? vehicle.getPrimaryPassenger()
+		Entity load = Objects.requireNonNull(vehicle.hasControllingPassenger()
+				? vehicle.getControllingPassenger()
 				: vehicle.getFirstPassenger());
 
 		return passenger.equals(load);

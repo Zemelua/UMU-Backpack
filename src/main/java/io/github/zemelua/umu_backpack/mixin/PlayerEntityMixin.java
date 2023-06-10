@@ -15,14 +15,14 @@ import static net.minecraft.entity.EntityType.*;
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
 	@Override
-	public void updatePassengerPosition(Entity passenger) {
+	public void updatePassengerPosition(Entity passenger, PositionUpdater positionUpdater) {
 		if (!this.hasPassenger(passenger)) return;
 
 		Vec3d pos = this.getPassengerPos(passenger).rotateY((float) Math.toRadians(-this.bodyYaw - 90.0D));
 		double x = this.getX() + pos.getX();
 		double y = this.getY() + this.getMountedHeightOffset() + passenger.getHeightOffset() + pos.getY();
 		double z = this.getZ() + pos.getZ();
-		passenger.setPosition(x, y, z);
+		positionUpdater.accept(passenger, x, y, z);
 	}
 
 	@Unique

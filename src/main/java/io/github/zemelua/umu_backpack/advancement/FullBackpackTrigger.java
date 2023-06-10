@@ -11,7 +11,7 @@ import net.minecraft.advancement.criterion.AbstractCriterionConditions;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
-import net.minecraft.predicate.entity.EntityPredicate;
+import net.minecraft.predicate.entity.LootContextPredicate;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
@@ -23,7 +23,7 @@ public class FullBackpackTrigger extends AbstractCriterion<FullBackpackTrigger.I
 	}
 
 	@Override
-	protected Instance conditionsFromJson(JsonObject json, EntityPredicate.Extended player, AdvancementEntityPredicateDeserializer predicateDeserializer) {
+	protected Instance conditionsFromJson(JsonObject json, LootContextPredicate player, AdvancementEntityPredicateDeserializer predicateDeserializer) {
 		return new Instance(player);
 	}
 
@@ -33,7 +33,7 @@ public class FullBackpackTrigger extends AbstractCriterion<FullBackpackTrigger.I
 	}
 
 	public static class Instance extends AbstractCriterionConditions {
-		private Instance(EntityPredicate.Extended player) {
+		private Instance(LootContextPredicate player) {
 			super(ID, player);
 		}
 
