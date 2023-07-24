@@ -33,7 +33,7 @@ public abstract class PlayerManagerMixin {
 					target = "Lnet/minecraft/server/PlayerManager;savePlayerData(Lnet/minecraft/server/network/ServerPlayerEntity;)V",
 					ordinal = 0))
 	@SuppressWarnings("SpellCheckingInspection")
-	private void removeLoadOnPlayerConnect(ServerPlayerEntity player, CallbackInfo callback) {
+	private void removeLoadOnPlayerDisconnect(ServerPlayerEntity player, CallbackInfo callback) {
 		if (LoadEnchantment.has(player) && player.hasPassengers()) {
 			Entity load = Objects.requireNonNull(player.getFirstPassenger());
 			((PlayerEntityInterface) player).setLoadCache(load);

@@ -61,7 +61,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Pl
 	@Inject(method = "onDisconnect",
 			at = @At("HEAD"),
 			cancellable = true)
-	private void skipDismountIfHasLoad(CallbackInfo callback) {
+	private void skipRemovingPassengersIfHasLoad(CallbackInfo callback) {
 		if (LoadEnchantment.has(this)) {
 			this.disconnected = true;
 			if (this.isSleeping()) {
