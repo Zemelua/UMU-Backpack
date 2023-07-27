@@ -9,14 +9,17 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.item.*;
+import net.minecraft.item.ArmorMaterials;
+import net.minecraft.item.DyeableArmorItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsage;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -140,7 +143,7 @@ public class BackpackItem extends DyeableArmorItem {
 			return true;
 		}
 
-		@Nonnull
+		@NotNull
 		@Override
 		public ItemStack getStack(int slot) {
 			return this.itemStacks.get(slot);
