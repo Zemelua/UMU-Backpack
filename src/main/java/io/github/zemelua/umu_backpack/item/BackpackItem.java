@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ArmorMaterials;
@@ -15,8 +16,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,6 +34,18 @@ public class BackpackItem extends DyeableArmorItem {
 
 	public BackpackItem() {
 		super(ArmorMaterials.LEATHER, Type.CHESTPLATE, new FabricItemSettings());
+	}
+
+	@Override
+	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+		ItemStack handStack = user.getStackInHand(hand);
+		ItemStack equippedStack = user.getEquippedStack(MobEntity.getPreferredEquipmentSlot(handStack));
+
+		if (equippedStack.isOf(ModItems.BACKPACK) && isLocked(user, equippedStack)) {
+			return TypedActionResult.fail(handStack);
+		}
+
+		return super.use(world, user, hand);
 	}
 
 	@Override
