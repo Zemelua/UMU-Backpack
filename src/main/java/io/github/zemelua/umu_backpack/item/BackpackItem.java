@@ -1,6 +1,7 @@
 package io.github.zemelua.umu_backpack.item;
 
 import io.github.zemelua.umu_backpack.ModConfigs;
+import io.github.zemelua.umu_backpack.data.tag.ModTags;
 import io.github.zemelua.umu_backpack.enchantment.LoadEnchantment;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.Entity;
@@ -106,6 +107,11 @@ public class BackpackItem extends DyeableArmorItem {
 		} else {
 			load.stopRiding();
 		}
+	}
+
+	public static boolean isLoadable(LivingEntity owner, Entity target) {
+		return (target.getType().isIn(ModTags.ENTITY_CAN_LOAD) && target.canStartRiding(owner))
+				|| (target instanceof MobEntity targetMob && targetMob.isBaby());
 	}
 
 	public static boolean isLoaded(Entity passenger) {

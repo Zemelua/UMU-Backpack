@@ -1,6 +1,5 @@
 package io.github.zemelua.umu_backpack.client.event;
 
-import io.github.zemelua.umu_backpack.data.tag.ModTags;
 import io.github.zemelua.umu_backpack.enchantment.LoadEnchantment;
 import io.github.zemelua.umu_backpack.item.BackpackItem;
 import io.github.zemelua.umu_backpack.item.ModItems;
@@ -51,7 +50,7 @@ public class OnEndTick implements ClientTickEvents.EndTick {
 									if (targetEntity.equals(player.getFirstPassenger())) {
 										unLoad(client, null);
 									} else {
-										if (targetEntity.getType().isIn(ModTags.ENTITY_CAN_LOAD) && targetEntity.canStartRiding(player)) {
+										if (BackpackItem.isLoadable(player, targetEntity)) {
 											load(client, targetEntity);
 										}
 									}
@@ -69,7 +68,7 @@ public class OnEndTick implements ClientTickEvents.EndTick {
 							if (target.getType() == HitResult.Type.ENTITY) {
 								Entity targetEntity = ((EntityHitResult) target).getEntity();
 
-								if (targetEntity.getType().isIn(ModTags.ENTITY_CAN_LOAD) && targetEntity.canStartRiding(player)) {
+								if (BackpackItem.isLoadable(player, targetEntity)) {
 									load(client, targetEntity);
 								}
 							}
