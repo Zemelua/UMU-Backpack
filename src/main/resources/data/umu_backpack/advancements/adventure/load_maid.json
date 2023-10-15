@@ -19,7 +19,7 @@
 		"load_maid": {
 			"trigger": "umu_backpack:load",
 			"conditions": {
-				"load": [
+				"load":
 					{
 						"condition": "minecraft:entity_properties",
 						"entity": "this",
@@ -27,7 +27,7 @@
 							"type": "umu_little_maid:little_maid"
 						}
 					}
-				]
+
 			}
 		}
 	},

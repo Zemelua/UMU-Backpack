@@ -1,58 +1,54 @@
 package io.github.zemelua.umu_backpack.advancement;
 
 import com.google.gson.JsonObject;
-import io.github.zemelua.umu_backpack.UMUBackpack;
 import net.minecraft.advancement.criterion.AbstractCriterion;
 import net.minecraft.advancement.criterion.AbstractCriterionConditions;
 import net.minecraft.entity.Entity;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
-import net.minecraft.predicate.entity.AdvancementEntityPredicateSerializer;
 import net.minecraft.predicate.entity.EntityPredicate;
 import net.minecraft.predicate.entity.LootContextPredicate;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
-public class LoadTrigger extends AbstractCriterion<LoadTrigger.Instance> {
-	private static final Identifier ID = UMUBackpack.identifier("load");
+import java.util.Optional;
+
+public class LoadTrigger extends AbstractCriterion<LoadTrigger.Conditions> {
 	private static final String KEY_LOAD = "load";
 
 	public void trigger(ServerPlayerEntity player, Entity load) {
 		LootContext loadContext = EntityPredicate.createAdvancementEntityLootContext(player, load);
 
-		this.trigger(player, (instance) -> instance.matches(loadContext));
+		this.trigger(player, (conditions) -> conditions.matches(loadContext));
 	}
 
 	@Override
-	protected Instance conditionsFromJson(JsonObject json, LootContextPredicate player, AdvancementEntityPredicateDeserializer deserializer) {
-		LootContextPredicate loadPredicate = EntityPredicate.contextPredicateFromJson(json, KEY_LOAD, deserializer);
+	protected Conditions conditionsFromJson(JsonObject json, Optional<LootContextPredicate> playerPredicate, AdvancementEntityPredicateDeserializer deserializer) {
+		Optional<LootContextPredicate> loadPredicate = EntityPredicate.contextPredicateFromJson(json, KEY_LOAD, deserializer);
 
-		return new Instance(player, loadPredicate);
+		return new Conditions(playerPredicate.orElse(null), loadPredicate.orElse(null));
 	}
 
-	@Override
-	public Identifier getId() {
-		return ID;
-	}
+	public static class Conditions extends AbstractCriterionConditions {
+		@Nullable private final LootContextPredicate loadPredicate;
 
-	public static class Instance extends AbstractCriterionConditions {
-		private final LootContextPredicate loadPredicate;
-
-		public Instance(LootContextPredicate entity, LootContextPredicate loadPredicate) {
-			super(ID, entity);
+		public Conditions(@Nullable LootContextPredicate playerPredicate, @Nullable LootContextPredicate loadPredicate) {
+			super(Optional.ofNullable(playerPredicate));
 
 			this.loadPredicate = loadPredicate;
 		}
 
 		private boolean matches(LootContext loadContext) {
-			return this.loadPredicate.test(loadContext);
+			return Optional.ofNullable(this.loadPredicate)
+					.map(l -> l.test(loadContext))
+					.orElse(false);
 		}
 
 		@Override
-		public JsonObject toJson(AdvancementEntityPredicateSerializer serializer) {
-			JsonObject json = super.toJson(serializer);
+		public JsonObject toJson() {
+			JsonObject json = super.toJson();
 
-			json.add(KEY_LOAD, this.loadPredicate.toJson(serializer));
+			Optional.ofNullable(this.loadPredicate).ifPresent(l -> json.add(KEY_LOAD, l.toJson()));
 
 			return json;
 		}

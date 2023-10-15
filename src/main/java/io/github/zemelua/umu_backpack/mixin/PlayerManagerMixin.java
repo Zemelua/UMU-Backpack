@@ -2,6 +2,7 @@ package io.github.zemelua.umu_backpack.mixin;
 
 import io.github.zemelua.umu_backpack.enchantment.LoadEnchantment;
 import io.github.zemelua.umu_backpack.item.BackpackItem;
+import io.github.zemelua.umu_backpack.network.NetworkHandler;
 import io.github.zemelua.umu_backpack.util.PlayerEntityInterface;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -23,7 +24,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Objects;
 
-import static io.github.zemelua.umu_backpack.network.NetworkHandler.*;
 import static net.minecraft.nbt.NbtElement.*;
 
 @Mixin(PlayerManager.class)
@@ -44,9 +44,8 @@ public abstract class PlayerManagerMixin {
 
 	@ModifyVariable(method = "onPlayerConnect",
 			at = @At(value = "INVOKE",
-					target = "Lnet/minecraft/server/network/ServerPlayerEntity;sendServerMetadata(Lnet/minecraft/server/ServerMetadata;)V",
-					ordinal = 0),
-			index = 6)
+					target = "Lnet/minecraft/server/world/ServerWorld;onPlayerConnected(Lnet/minecraft/server/network/ServerPlayerEntity;)V"),
+			index = 7)
 	@SuppressWarnings("SpellCheckingInspection")
 	private NbtCompound spawnLoadOnPlayerConnect(NbtCompound playerNBT, ClientConnection connection, ServerPlayerEntity player) {
 		if (playerNBT != null) {
@@ -64,7 +63,7 @@ public abstract class PlayerManagerMixin {
 						packet.writeInt(player.getId());
 						packet.writeInt(passenger.getId());
 						for (ServerPlayerEntity tracking : PlayerLookup.tracking(passenger)) {
-							ServerPlayNetworking.send(tracking, CHANNEL_LOAD_TO_CLIENT, packet);
+							ServerPlayNetworking.send(tracking, NetworkHandler.CHANNEL_LOAD_TO_CLIENT, packet);
 						}
 					}
 				}

@@ -24,7 +24,7 @@ dependencies {
 
 	modImplementation(include(group: 'com.github.Chocohead', name: 'fabric-asm', version: 'v2.3'))
 	modImplementation(group: 'com.terraformersmc', name: 'modmenu', version: project.modmenu_version)
-	modImplementation(include(group: 'com.github.Zemelua', name: 'UMU-Config', version: 'v1.0-alpha'))
+	modImplementation(include(group: 'com.github.Zemelua', name: 'UMU-Config', version: '1.20.x-SNAPSHOT'))
 }
 
 processResources {
@@ -62,7 +62,7 @@ jar {
 }
 
 remapJar {
-	archiveFileName = "${project.archivesBaseName}-${project.version}-${project.depends_minecraft_version}.jar"
+	archiveFileName = "${project.archivesBaseName}-${project.version}-${project.minecraft_version}.jar"
 }
 
 publishing {

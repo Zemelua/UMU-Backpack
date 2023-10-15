@@ -1,7 +1,6 @@
 package io.github.zemelua.umu_backpack.advancement;
 
 import com.google.gson.JsonObject;
-import io.github.zemelua.umu_backpack.UMUBackpack;
 import io.github.zemelua.umu_backpack.enchantment.CramEnchantment;
 import io.github.zemelua.umu_backpack.enchantment.ModEnchantments;
 import io.github.zemelua.umu_backpack.item.BackpackItem;
@@ -13,28 +12,23 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
 import net.minecraft.predicate.entity.LootContextPredicate;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
-public class FullBackpackTrigger extends AbstractCriterion<FullBackpackTrigger.Instance> {
-	private static final Identifier ID = UMUBackpack.identifier("full_backpack");
+import java.util.Optional;
 
+public class FullBackpackTrigger extends AbstractCriterion<FullBackpackTrigger.Conditions> {
 	public void trigger(ServerPlayerEntity player, Inventory inventory, ItemStack itemStack) {
-		this.trigger(player, (instance) -> instance.matches(inventory, itemStack));
+		this.trigger(player, (conditions) -> conditions.matches(inventory, itemStack));
 	}
 
 	@Override
-	protected Instance conditionsFromJson(JsonObject json, LootContextPredicate player, AdvancementEntityPredicateDeserializer predicateDeserializer) {
-		return new Instance(player);
+	protected Conditions conditionsFromJson(JsonObject json, Optional<LootContextPredicate> playerPredicate, AdvancementEntityPredicateDeserializer deserializer) {
+		return new Conditions(playerPredicate.orElse(null));
 	}
 
-	@Override
-	public Identifier getId() {
-		return ID;
-	}
-
-	public static class Instance extends AbstractCriterionConditions {
-		private Instance(LootContextPredicate player) {
-			super(ID, player);
+	public static class Conditions extends AbstractCriterionConditions {
+		private Conditions(@Nullable LootContextPredicate player) {
+			super(Optional.ofNullable(player));
 		}
 
 		/**
