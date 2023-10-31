@@ -25,7 +25,7 @@ dependencies {
 
 	modImplementation(include(group: 'com.github.Chocohead', name: 'fabric-asm', version: 'v2.3'))
 	modImplementation(group: 'com.terraformersmc', name: 'modmenu', version: project.modmenu_version)
-	modImplementation(include(group: 'com.github.Zemelua', name: 'UMU-Config', version: '1.20.x-SNAPSHOT'))
+	modImplementation("com.github.Zemelua:UMU-Config:1.0")
 }
 
 processResources {
