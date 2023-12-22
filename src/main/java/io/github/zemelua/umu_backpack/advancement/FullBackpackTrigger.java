@@ -1,18 +1,18 @@
 package io.github.zemelua.umu_backpack.advancement;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.zemelua.umu_backpack.enchantment.CramEnchantment;
 import io.github.zemelua.umu_backpack.enchantment.ModEnchantments;
 import io.github.zemelua.umu_backpack.item.BackpackItem;
 import io.github.zemelua.umu_backpack.item.ModItems;
 import net.minecraft.advancement.criterion.AbstractCriterion;
-import net.minecraft.advancement.criterion.AbstractCriterionConditions;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
+import net.minecraft.predicate.entity.EntityPredicate;
 import net.minecraft.predicate.entity.LootContextPredicate;
 import net.minecraft.server.network.ServerPlayerEntity;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.util.dynamic.Codecs;
 
 import java.util.Optional;
 
@@ -22,14 +22,14 @@ public class FullBackpackTrigger extends AbstractCriterion<FullBackpackTrigger.C
 	}
 
 	@Override
-	protected Conditions conditionsFromJson(JsonObject json, Optional<LootContextPredicate> playerPredicate, AdvancementEntityPredicateDeserializer deserializer) {
-		return new Conditions(playerPredicate.orElse(null));
+	public Codec<Conditions> getConditionsCodec() {
+		return Conditions.CODEC;
 	}
 
-	public static class Conditions extends AbstractCriterionConditions {
-		private Conditions(@Nullable LootContextPredicate player) {
-			super(Optional.ofNullable(player));
-		}
+	public record Conditions(Optional<LootContextPredicate> player) implements AbstractCriterion.Conditions {
+		private static final Codec<Conditions> CODEC = RecordCodecBuilder.create((instance)
+				-> instance.group(Codecs.createStrictOptionalFieldCodec(EntityPredicate.LOOT_CONTEXT_PREDICATE_CODEC, "player").forGetter(Conditions::player))
+				.apply(instance, Conditions::new));
 
 		/**
 		 * Minecraft 1.19時点で、バンドルが正式実装されていないため、このトリガーの条件は「アーマースロットを除くすべての
