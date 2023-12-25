@@ -9,6 +9,9 @@ import io.github.zemelua.umu_backpack.item.ModItems;
 import io.github.zemelua.umu_backpack.network.NetworkHandler;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
@@ -28,6 +31,9 @@ public class UMUBackpack implements ModInitializer {
 		NetworkHandler.initializeServer();
 
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(EventListeners::onModifyToolsItemGroup);
+
+		FabricLoader.getInstance().getModContainer(MOD_ID).ifPresent(container
+				-> ResourceManagerHelper.registerBuiltinResourcePack(UMUBackpack.identifier("easier_recipe"), container, ResourcePackActivationType.NORMAL));
 	}
 
 	public static Identifier identifier(String path) {

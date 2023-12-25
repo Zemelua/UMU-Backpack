@@ -2,7 +2,6 @@ package io.github.zemelua.umu_backpack.client;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import io.github.zemelua.umu_backpack.UMUBackpack;
 import io.github.zemelua.umu_backpack.client.event.OnEndTick;
 import io.github.zemelua.umu_backpack.client.gui.BackpackScreen;
 import io.github.zemelua.umu_backpack.client.renderer.armor.BackpackRenderer;
@@ -16,10 +15,6 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
-import net.fabricmc.fabric.impl.resource.loader.ResourceManagerHelperImpl;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.option.KeyBinding;
@@ -62,11 +57,6 @@ public class UMUBackpackClient implements ClientModInitializer, ModMenuApi {
 		NetworkHandler.initializeClient();
 
 		KeyBindingHelper.registerKeyBinding(KEY_BACKPACK);
-
-		FabricLoader.getInstance().getModContainer(MOD_ID).ifPresent(container -> {
-			ResourceManagerHelperImpl.registerBuiltinResourcePack(UMUBackpack.identifier("easier_recipe"), "datapacks/easier_recipe", container, ResourcePackActivationType.NORMAL);
-			ResourceManagerHelper.registerBuiltinResourcePack(UMUBackpack.identifier("easier_recipe"), container, ResourcePackActivationType.NORMAL);
-		});
 	}
 
 	@Override

@@ -3,20 +3,18 @@
 	"pattern": [
 		"#X#",
 		"Y Y",
-		"#Z#"
+		"###"
 	],
 	"key": {
 		"#": {
-			"item": "minecraft:stick"
+			"item": "minecraft:leather"
 		},
 		"X": {
 			"item": "minecraft:gold_ingot"
 		},
 		"Y": {
 			"item": "minecraft:rabbit_hide"
-		},
-		"Z": {
-			"item": "minecraft:shulker_shell"
+		}"item": "minecraft:shulker_shell"
 		}
 	},
 	"result": {
