@@ -2,13 +2,16 @@ package io.github.zemelua.umu_backpack.client;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
+import io.github.zemelua.umu_backpack.ModConfigs;
 import io.github.zemelua.umu_backpack.client.event.OnEndTick;
 import io.github.zemelua.umu_backpack.client.gui.BackpackScreen;
 import io.github.zemelua.umu_backpack.client.renderer.armor.BackpackRenderer;
 import io.github.zemelua.umu_backpack.inventory.ModInventories;
 import io.github.zemelua.umu_backpack.item.BackpackItem;
 import io.github.zemelua.umu_backpack.network.NetworkHandler;
-import io.github.zemelua.umu_config.config.ConfigManager;
+import io.github.zemelua.umu_config.api.util.UMUConfigClothUtils;
+import io.github.zemelua.umu_config.config.ConfigFileManager;
+import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -21,6 +24,7 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeableItem;
+import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
 import static io.github.zemelua.umu_backpack.UMUBackpack.*;
@@ -61,6 +65,20 @@ public class UMUBackpackClient implements ClientModInitializer, ModMenuApi {
 
 	@Override
 	public ConfigScreenFactory<?> getModConfigScreenFactory() {
-		return parent -> ConfigManager.openConfigScreen(parent, MOD_ID).orElse(null);
+		return parent -> {
+			ConfigBuilder builder = ConfigBuilder.create();
+			builder.getOrCreateCategory(ModConfigs.CONFIG.getName())
+					.addEntry(UMUConfigClothUtils.toggle(builder, ModConfigs.FREELY_DETACH).build())
+					.addEntry(UMUConfigClothUtils.selector(builder, ModConfigs.CRAM_ENCHANTMENT_RARITY).build())
+					.addEntry(UMUConfigClothUtils.selector(builder, ModConfigs.LOAD_ENCHANTMENT_RARITY).build())
+					.addEntry(UMUConfigClothUtils.selector(builder, ModConfigs.BACK_ENCHANTMENT_PROTECTION_RARITY).build())
+					.addEntry(builder.entryBuilder().fillKeybindingField(Text.translatable("config.name.umu_backpack.backpack_key"), UMUBackpackClient.KEY_BACKPACK).build());
+
+			builder.setParentScreen(parent)
+					.setTitle(Text.translatable("config.title.umu_backpack"))
+					.setSavingRunnable(() -> ConfigFileManager.saveFrom(ModConfigs.CONFIG));
+
+			return builder.build();
+		};
 	}
 }

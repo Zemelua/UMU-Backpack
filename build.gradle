@@ -24,8 +24,9 @@ dependencies {
 	modImplementation(group: 'net.fabricmc.fabric-api', name: 'fabric-api', version: project.fabric_version)
 
 	modImplementation(include(group: 'com.github.Chocohead', name: 'fabric-asm', version: 'v2.3'))
-	modImplementation(group: 'com.terraformersmc', name: 'modmenu', version: project.modmenu_version)
-	modImplementation("com.github.Zemelua:UMU-Config:1.20.x-SNAPSHOT")
+	modImplementation "com.github.Zemelua:UMU-Config:${project.umu_config_version}"
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+	modImplementation "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
 }
 
 processResources {
@@ -71,15 +72,16 @@ import com.modrinth.minotaur.dependencies.ModDependency
 modrinth {
 	token = System.getenv("TOKEN")
 	projectId = "aPpO2lOR"
-	versionName = "UMU Backpack 6.1"
-	versionNumber = "6.1"
+	versionName = "UMU Backpack 7.1"
+	versionNumber = "7.1"
 	uploadFile = remapJar
-	gameVersions = ["1.20.2"]
+	gameVersions = ["1.20.4"]
 	loaders = ["fabric"]
 	dependencies = [
 			new ModDependency('P7dR8mSH', 'required'),
 			new ModDependency('mOgUt4GM', 'required')
 	]
+	description = "Compatible with MC1.20.4."
 }
 
 publishing {
